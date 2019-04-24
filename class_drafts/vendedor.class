@@ -1,0 +1,25 @@
+public class Vendedor extends Pessoa {
+    private double salarioBase;
+    private double taxaComissao;
+
+    public Vendedor(String cpf, String nome, Double salarioBase) {
+        super(cpf, nome);
+        this.salarioBase = salarioBase;
+    }
+
+    public void setSalarioBase(double salarioBase) {
+        this.salarioBase = salarioBase;
+    }
+
+    public void setTaxaComissao(double setTaxaComissao) {
+        this.setTaxaComissao = setTaxaComissao;
+    }
+
+    public double getSalarioBase(){
+        return salarioBase;
+    }
+
+    public double getTaxaComissao(){
+        return taxaComissao;
+    }
+}
