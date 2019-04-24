@@ -1,0 +1,45 @@
+
+public class Pedido {
+    private String numero;
+    private String dataEmissao;
+    private String dataPagto;
+    private boolean formaPagto;
+    private boolean situacao;
+
+    public Pedido(String numero, String dataEmissao) {
+        this.numero = numero;
+        this.dataEmissao = dataEmissao;
+    }
+
+    public void setDataPagto(String dataPagto) {
+        this.dataPagto = dataPagto;
+    }
+
+    public void set(boolean formaPagto) {
+        this.formaPagto = formaPagto;
+    }
+
+    public void set(boolean situacao) {
+        this.situacao = situacao;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getDataEmissao() {
+        return dataEmissao;
+    }
+
+    public String getDataPagto() {
+        return dataPagto;
+    }
+
+    public boolean getFormaPagto() {
+        return formaPagto;
+    }
+
+    public boolean getSituacao() {
+        return situacao;
+    }
+}
