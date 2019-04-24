@@ -7,10 +7,21 @@ public class Pedido {
     private boolean situacao;
     private Cliente cliente;
     private Vendedor vendedor;
+    private ArrayList<ItemPedido> itens;
 
     public Pedido(String numero, String dataEmissao) {
         this.numero = numero;
         this.dataEmissao = dataEmissao;
+        itens = new ArrayList<ItemPedido>();
+    }
+
+    public addItem(Produto produto) {
+        itens.add(produto);
+        produto.setPedido(this);
+
+        if (formaPagto) {
+            cliente.setLimiteDisp(client.getLimiteDisp() - produto.getPreco());
+        }
     }
 
     public setVendedor(Vendedor vendedor) {
