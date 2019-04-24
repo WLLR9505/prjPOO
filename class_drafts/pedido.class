@@ -6,10 +6,15 @@ public class Pedido {
     private boolean formaPagto;
     private boolean situacao;
     private Cliente cliente;
+    private Vendedor vendedor;
 
     public Pedido(String numero, String dataEmissao) {
         this.numero = numero;
         this.dataEmissao = dataEmissao;
+    }
+
+    public setVendedor(Vendedor vendedor) {
+        this.vendedor = vendedor;
     }
 
     public setCliente(Cliente cliente) {
