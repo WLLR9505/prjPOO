@@ -15,7 +15,7 @@ public class Pedido {
         itens = new ArrayList<ItemPedido>();
     }
 
-    public addItem(Produto produto) {
+    public void addItem(Produto produto) {
         itens.add(produto);
         produto.setPedido(this);
 
@@ -24,11 +24,11 @@ public class Pedido {
         }
     }
 
-    public setVendedor(Vendedor vendedor) {
+    public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
 
-    public setCliente(Cliente cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
@@ -36,11 +36,11 @@ public class Pedido {
         this.dataPagto = dataPagto;
     }
 
-    public void set(boolean formaPagto) {
+    public void setFormaPagto(boolean formaPagto) {
         this.formaPagto = formaPagto;
     }
 
-    public void set(boolean situacao) {
+    public void setSituacao(boolean situacao) {
         this.situacao = situacao;
     }
 

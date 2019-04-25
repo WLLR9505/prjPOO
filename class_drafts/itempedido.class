@@ -10,7 +10,7 @@ public class ItemPedido {
         produto.setQtdeEstoque(produto.getQtdeEstoque() - qtdeVendida);
     }
 
-    public setPedido(Pedido pedido) {
+    public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
 
