@@ -30,10 +30,6 @@ public abstract class Pessoa {
         this.cep = cep;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
     public void setDdd(String ddd) {
         this.ddd = ddd;
     }
