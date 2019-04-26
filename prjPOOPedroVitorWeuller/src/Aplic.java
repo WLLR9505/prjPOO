@@ -22,5 +22,11 @@ public class Aplic {
         prod2.setPreco(350.00);
         prod2.setUnidadeMedida("un");
         prod2.setQtdeEstoque(95);
+        
+        for (int i=0; i<clientes.size(); i++){
+            System.out.println("\nCPF: " + clientes.get(i).getCpf());
+            System.out.println("Nome: " + clientes.get(i).getNome());
+            System.out.println("Limite: " + clientes.get(i).getLimiteCred());
+        }
     }
 }
