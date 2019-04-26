@@ -29,10 +29,17 @@ public class Aplic {
         prod2.setUnidadeMedida("un");
         prod2.setQtdeEstoque(95);
         
+
+        for (int i=0; i<clientes.size(); i++){
+            System.out.println("\nCPF: " + clientes.get(i).getCpf());
+            System.out.println("Nome: " + clientes.get(i).getNome());
+            System.out.println("Limite: " + clientes.get(i).getLimiteCred());
+        }
         for (int i = 0; i < vendedores.size(); i++) {
             System.out.println("\nCPF: " + vendedores.get(i).getCpf());
             System.out.println("Vendedor: " + vendedores.get(i).getNome());
             System.out.println("Salario Base: " + vendedores.get(i).getSalarioBase());
+
         }
     }
 }
