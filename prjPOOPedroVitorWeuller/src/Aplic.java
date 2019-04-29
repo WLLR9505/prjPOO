@@ -1,5 +1,7 @@
 
 import fatec.poo.model.Cliente;
+import fatec.poo.model.ItemPedido;
+import fatec.poo.model.Pedido;
 import java.util.ArrayList;
 import fatec.poo.model.Produto;
 import fatec.poo.model.Vendedor;
@@ -30,21 +32,55 @@ public class Aplic {
         prod2.setUnidadeMedida("un");
         prod2.setQtdeEstoque(95);
 
-        // mostrar os clientes
+        // mostrar os vendedores
+//        for (int i = 0; i < vendedores.size(); i++) {
+//            System.out.println("\nCPF: " + vendedores.get(i).getCpf());
+//            System.out.println("Vendedor: " + vendedores.get(i).getNome());
+//            System.out.println("Salario Base: " + vendedores.get(i).getSalarioBase());
+//        }
+
+        // Clientes antes dos pedidos
         for (int i=0; i<clientes.size(); i++){
             System.out.println("\nCPF: " + clientes.get(i).getCpf());
             System.out.println("Nome: " + clientes.get(i).getNome());
             System.out.println("Limite: " + clientes.get(i).getLimiteCred());
+            System.out.println("=== PEDIDOS de " + clientes.get(i).getNome() + " ===");
+            for (int j=0; j<clientes.get(i).getPedidos().size(); j++) {
+                System.out.println("Pedido " + clientes.get(i).getPedidos().get(j).getNumero());
+                System.out.println("Data de emissão: " + clientes.get(i).getPedidos().get(j).getDataEmissao());
+            }
         }
 
-        // mostrar os vendedores
-        for (int i = 0; i < vendedores.size(); i++) {
-            System.out.println("\nCPF: " + vendedores.get(i).getCpf());
-            System.out.println("Vendedor: " + vendedores.get(i).getNome());
-            System.out.println("Salario Base: " + vendedores.get(i).getSalarioBase());
+        // cada cliente faz 2 pedido para o vendedor 1
+        int pedidos = 0;
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente c = clientes.get(i);
+            Pedido p1 = new Pedido("00" + (++pedidos), "29/04/2019");
+            
+            p1.setVendedor(vendedores.get(0));
+            p1.setFormaPagto(true); // a prazo
+            c.addPedido(p1);
+            p1.addItem(new ItemPedido(1, 2.5, prod1));
+            p1.addItem(new ItemPedido(2, 10, prod2));
+
+//            Pedido p2 = new Pedido("00" + (++pedidos), "29/04/2019");
+//            p2.setVendedor(vendedores.get(0));
+//            p2.setFormaPagto(false); // a vista
+//            p2.addItem(new ItemPedido(1, 8.9, prod1));
+//            p2.addItem(new ItemPedido(2, 20, prod2));
+//            c.addPedido(p2);
         }
 
-        // efetuar uma compra/venda
-        
+        // Clientes após os pedidos
+        for (int i=0; i<clientes.size(); i++){
+            System.out.println("\nCPF: " + clientes.get(i).getCpf());
+            System.out.println("Nome: " + clientes.get(i).getNome());
+            System.out.println("Limite: " + clientes.get(i).getLimiteCred());
+            System.out.println("=== PEDIDOS de " + clientes.get(i).getNome() + " ===");
+            for (int j=0; j<clientes.get(i).getPedidos().size(); j++) {
+                System.out.println("Pedido " + clientes.get(i).getPedidos().get(j).getNumero());
+                System.out.println("Data de emissão: " + clientes.get(i).getPedidos().get(j).getDataEmissao());
+            }
+        }
     }
 }
