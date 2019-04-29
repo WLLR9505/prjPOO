@@ -1,7 +1,6 @@
+
 package fatec.poo.model;
-
 import java.util.ArrayList;
-
 
 public class Pedido {
     private String numero;
@@ -68,4 +67,3 @@ public class Pedido {
         return situacao;
     }
 }
-

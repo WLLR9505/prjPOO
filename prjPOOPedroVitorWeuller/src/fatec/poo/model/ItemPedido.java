@@ -1,5 +1,5 @@
-package fatec.poo.model;
 
+package fatec.poo.model;
 
 public class ItemPedido {
     private int sequencia;
@@ -33,4 +33,3 @@ public class ItemPedido {
         return qtdeVendida;
     }
 }
-

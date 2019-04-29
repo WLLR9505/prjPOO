@@ -1,5 +1,5 @@
-package fatec.poo.model;
 
+package fatec.poo.model;
 import java.util.ArrayList;
 
 public class Cliente extends Pessoa {
