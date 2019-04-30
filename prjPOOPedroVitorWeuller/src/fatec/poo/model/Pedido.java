@@ -23,12 +23,7 @@ public class Pedido {
         item.setPedido(this);
 
         if (formaPagto) {
-            System.out.println("a>>> " + cliente.getNome());
-            System.out.println("b>>> " + cliente.getLimiteDisp());
-            System.out.println("c>>> " + item.getProduto());
-            // System.out.println("d>>> " + item.getProduto().getPreco());
-
-            // cliente.setLimiteDisp(cliente.getLimiteDisp() - item.getProduto().getPreco());
+            cliente.setLimiteDisp(cliente.getLimiteDisp() - item.getProduto().getPreco() * item.getQtdeVendida());
         }
     }
 

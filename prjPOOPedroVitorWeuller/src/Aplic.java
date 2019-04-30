@@ -2,9 +2,9 @@
 import fatec.poo.model.Cliente;
 import fatec.poo.model.ItemPedido;
 import fatec.poo.model.Pedido;
-import java.util.ArrayList;
 import fatec.poo.model.Produto;
 import fatec.poo.model.Vendedor;
+import java.util.ArrayList;
 
 public class Aplic {
     public static void main(String[] args) {
@@ -16,7 +16,7 @@ public class Aplic {
 
         // instanciar 3 clientes
         ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-        clientes.add(new Cliente("555.555.555-55", "Bernardo", 900.00));
+        clientes.add(new Cliente("555.555.555-55", "Bernardo", 1500.00));
         clientes.add(new Cliente("555.555.555-56", "Vitor", 9000.00));
         clientes.add(new Cliente("555.555.555-57", "Weuller", 52000.00));
 
@@ -33,17 +33,17 @@ public class Aplic {
         prod2.setQtdeEstoque(95);
 
         // mostrar os vendedores
-//        for (int i = 0; i < vendedores.size(); i++) {
-//            System.out.println("\nCPF: " + vendedores.get(i).getCpf());
-//            System.out.println("Vendedor: " + vendedores.get(i).getNome());
-//            System.out.println("Salario Base: " + vendedores.get(i).getSalarioBase());
-//        }
+        for (int i = 0; i < vendedores.size(); i++) {
+            System.out.println("\nCPF: " + vendedores.get(i).getCpf());
+            System.out.println("Vendedor: " + vendedores.get(i).getNome());
+            System.out.println("Salario Base: " + vendedores.get(i).getSalarioBase());
+        }
 
         // Clientes antes dos pedidos
         for (int i=0; i<clientes.size(); i++){
             System.out.println("\nCPF: " + clientes.get(i).getCpf());
             System.out.println("Nome: " + clientes.get(i).getNome());
-            System.out.println("Limite: " + clientes.get(i).getLimiteCred());
+            System.out.println("Limite: " + clientes.get(i).getLimiteDisp() + "/" + clientes.get(i).getLimiteCred());
             System.out.println("=== PEDIDOS de " + clientes.get(i).getNome() + " ===");
             for (int j=0; j<clientes.get(i).getPedidos().size(); j++) {
                 System.out.println("Pedido " + clientes.get(i).getPedidos().get(j).getNumero());
@@ -56,26 +56,25 @@ public class Aplic {
         for (int i = 0; i < clientes.size(); i++) {
             Cliente c = clientes.get(i);
             Pedido p1 = new Pedido("00" + (++pedidos), "29/04/2019");
-            
+            c.addPedido(p1);
             p1.setVendedor(vendedores.get(0));
             p1.setFormaPagto(true); // a prazo
-            c.addPedido(p1);
             p1.addItem(new ItemPedido(1, 2.5, prod1));
-            p1.addItem(new ItemPedido(2, 10, prod2));
+            p1.addItem(new ItemPedido(2, 2, prod2));
 
-//            Pedido p2 = new Pedido("00" + (++pedidos), "29/04/2019");
-//            p2.setVendedor(vendedores.get(0));
-//            p2.setFormaPagto(false); // a vista
-//            p2.addItem(new ItemPedido(1, 8.9, prod1));
-//            p2.addItem(new ItemPedido(2, 20, prod2));
-//            c.addPedido(p2);
+            Pedido p2 = new Pedido("00" + (++pedidos), "29/04/2019");
+            c.addPedido(p2);
+            p2.setVendedor(vendedores.get(0));
+            p2.setFormaPagto(false); // a vista
+            p2.addItem(new ItemPedido(1, 8.9, prod1));
+            p2.addItem(new ItemPedido(2, 5, prod2));
         }
 
         // Clientes após os pedidos
         for (int i=0; i<clientes.size(); i++){
             System.out.println("\nCPF: " + clientes.get(i).getCpf());
             System.out.println("Nome: " + clientes.get(i).getNome());
-            System.out.println("Limite: " + clientes.get(i).getLimiteCred());
+            System.out.println("Limite: " + clientes.get(i).getLimiteDisp() + "/" + clientes.get(i).getLimiteCred());
             System.out.println("=== PEDIDOS de " + clientes.get(i).getNome() + " ===");
             for (int j=0; j<clientes.get(i).getPedidos().size(); j++) {
                 System.out.println("Pedido " + clientes.get(i).getPedidos().get(j).getNumero());
