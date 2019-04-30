@@ -1,7 +1,6 @@
+
 package fatec.poo.model;
-
 import java.util.ArrayList;
-
 
 public class Pedido {
     private String numero;
@@ -24,7 +23,7 @@ public class Pedido {
         item.setPedido(this);
 
         if (formaPagto) {
-            cliente.setLimiteDisp(cliente.getLimiteDisp() - item.getProduto().getPreco());
+            cliente.setLimiteDisp(cliente.getLimiteDisp() - item.getProduto().getPreco() * item.getQtdeVendida());
         }
     }
 
@@ -68,4 +67,3 @@ public class Pedido {
         return situacao;
     }
 }
-

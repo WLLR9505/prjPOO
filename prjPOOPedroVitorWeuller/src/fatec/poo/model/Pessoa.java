@@ -1,3 +1,4 @@
+
 package fatec.poo.model;
 
 public abstract class Pessoa {
@@ -71,4 +72,3 @@ public abstract class Pessoa {
         return telefone;
     }
 }
-

@@ -1,5 +1,5 @@
-package fatec.poo.model;
 
+package fatec.poo.model;
 
 public class ItemPedido {
     private int sequencia;
@@ -10,13 +10,18 @@ public class ItemPedido {
     public ItemPedido(int sequencia, double qtdeVendida, Produto produto) {
         this.sequencia = sequencia;
         this.qtdeVendida = qtdeVendida;
+        this.produto = produto;
         produto.setQtdeEstoque(produto.getQtdeEstoque() - qtdeVendida);
     }
 
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
-    
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
     public Produto getProduto(){
         return produto;
     }
@@ -33,4 +38,3 @@ public class ItemPedido {
         return qtdeVendida;
     }
 }
-

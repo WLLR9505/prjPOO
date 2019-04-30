@@ -1,8 +1,6 @@
 
 package fatec.poo.model;
-
 import java.util.ArrayList;
-
 
 public class Vendedor extends Pessoa {
     private double salarioBase;
@@ -36,4 +34,3 @@ public class Vendedor extends Pessoa {
         pedido.setVendedor(this);
     }
 }
-

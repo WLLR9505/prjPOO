@@ -1,5 +1,5 @@
-package fatec.poo.model;
 
+package fatec.poo.model;
 
 public class Produto {
     private String codigo;
