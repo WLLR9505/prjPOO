@@ -14,4 +14,4 @@ nb-configuration.xml
 *.ear
 project.properties
 
-.vscode/
+.vscode/*
