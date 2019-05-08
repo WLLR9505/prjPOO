@@ -15,3 +15,4 @@ nb-configuration.xml
 project.properties
 
 .vscode/*
+thumbs.db
