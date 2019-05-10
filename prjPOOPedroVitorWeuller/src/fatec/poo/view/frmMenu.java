@@ -20,37 +20,43 @@ public class frmMenu extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        mnuClientes = new javax.swing.JMenuItem();
+        mnuVendedores = new javax.swing.JMenuItem();
+        mnuProdutos = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        mnuSair = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        mnuEmiPed = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Controle de Vendas");
 
         jMenu1.setText("Cadastros");
 
-        jMenuItem1.setText("Clientes");
-        jMenu1.add(jMenuItem1);
+        mnuClientes.setText("Clientes");
+        mnuClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuClientesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuClientes);
 
-        jMenuItem2.setText("Vendedores");
-        jMenu1.add(jMenuItem2);
+        mnuVendedores.setText("Vendedores");
+        jMenu1.add(mnuVendedores);
 
-        jMenuItem3.setText("Produtos");
-        jMenu1.add(jMenuItem3);
+        mnuProdutos.setText("Produtos");
+        jMenu1.add(mnuProdutos);
         jMenu1.add(jSeparator1);
 
-        jMenuItem4.setText("Sair");
-        jMenu1.add(jMenuItem4);
+        mnuSair.setText("Sair");
+        jMenu1.add(mnuSair);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Pedido");
 
-        jMenuItem5.setText("Emitir Pedido");
-        jMenu2.add(jMenuItem5);
+        mnuEmiPed.setText("Emitir Pedido");
+        jMenu2.add(mnuEmiPed);
 
         jMenuBar1.add(jMenu2);
 
@@ -69,6 +75,10 @@ public class frmMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mnuClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuClientesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnuClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -109,11 +119,11 @@ public class frmMenu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem mnuClientes;
+    private javax.swing.JMenuItem mnuEmiPed;
+    private javax.swing.JMenuItem mnuProdutos;
+    private javax.swing.JMenuItem mnuSair;
+    private javax.swing.JMenuItem mnuVendedores;
     // End of variables declaration//GEN-END:variables
 }
