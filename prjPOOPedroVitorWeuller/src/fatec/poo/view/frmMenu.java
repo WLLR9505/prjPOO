@@ -42,13 +42,28 @@ public class frmMenu extends javax.swing.JFrame {
         jMenu1.add(mnuClientes);
 
         mnuVendedores.setText("Vendedores");
+        mnuVendedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuVendedoresActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuVendedores);
 
         mnuProdutos.setText("Produtos");
+        mnuProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuProdutosActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuProdutos);
         jMenu1.add(jSeparator1);
 
         mnuSair.setText("Sair");
+        mnuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSairActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuSair);
 
         jMenuBar1.add(jMenu1);
@@ -77,8 +92,20 @@ public class frmMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuClientesActionPerformed
-        // TODO add your handling code here:
+        new frmCadastroCliente().setVisible(true);
     }//GEN-LAST:event_mnuClientesActionPerformed
+
+    private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
+        dispose();
+    }//GEN-LAST:event_mnuSairActionPerformed
+
+    private void mnuVendedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuVendedoresActionPerformed
+        new frmCadastroVendedor().setVisible(true);
+    }//GEN-LAST:event_mnuVendedoresActionPerformed
+
+    private void mnuProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProdutosActionPerformed
+        new frmProduto().setVisible(true);
+    }//GEN-LAST:event_mnuProdutosActionPerformed
 
     /**
      * @param args the command line arguments
