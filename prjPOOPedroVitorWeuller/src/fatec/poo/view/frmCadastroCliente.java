@@ -40,7 +40,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         btnExcluir = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
         lblLmtCrdt = new javax.swing.JLabel();
-        lblLmtDspnvl = new javax.swing.JLabel();
+        lblLimDis = new javax.swing.JLabel();
         ftfCep = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -125,8 +125,8 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         lblLmtCrdt.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         lblLmtCrdt.setEnabled(false);
 
-        lblLmtDspnvl.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        lblLmtDspnvl.setEnabled(false);
+        lblLimDis.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        lblLimDis.setEnabled(false);
 
         try {
             ftfCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
@@ -177,7 +177,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
-                        .addComponent(lblLmtDspnvl, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
@@ -228,7 +228,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(lblLmtCrdt, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(lblLmtDspnvl, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConsultar)
@@ -239,7 +239,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblLmtCrdt, lblLmtDspnvl, txtTelefone});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblLimDis, lblLmtCrdt, txtTelefone});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -301,8 +301,8 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblLimDis;
     private javax.swing.JLabel lblLmtCrdt;
-    private javax.swing.JLabel lblLmtDspnvl;
     private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtDdd;
     private javax.swing.JTextField txtEndereco;

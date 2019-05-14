@@ -70,7 +70,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="lblLmtDspnvl" min="-2" pref="67" max="-2" attributes="0"/>
+                      <Component id="lblLimDis" min="-2" pref="67" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -128,7 +128,7 @@
                   <Component id="jLabel7" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="lblLmtCrdt" linkSize="2" alignment="2" min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="jLabel10" alignment="2" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblLmtDspnvl" linkSize="2" alignment="2" min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="lblLimDis" linkSize="2" alignment="2" min="-2" pref="20" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -360,7 +360,7 @@
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblLmtDspnvl">
+    <Component class="javax.swing.JLabel" name="lblLimDis">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.SoftBevelBorderInfo">
