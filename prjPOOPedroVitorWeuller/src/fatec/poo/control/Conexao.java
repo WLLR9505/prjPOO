@@ -13,7 +13,7 @@ public class Conexao {
 
     public Conexao(String usuario, String senha) {   
         this.usuario = usuario;
-        this.senha = senha;   
+        this.senha = senha;
     }
 
     public void setConnectionString(String connectionString) {
@@ -23,26 +23,25 @@ public class Conexao {
     public void setDriver(String driver) {
         this.driver = driver;
     }
-   
-    public Connection conectar() {   
-	if (connection == null) {
-	    try {
-                Class.forName(driver);
 
-                connection = DriverManager.getConnection(connectionString, usuario, senha);               
-	        System.out.println("Conexao OK");
+    public Connection conectar() {   
+        if (connection == null) {
+            try {
+                Class.forName(driver);
+                connection = DriverManager.getConnection(connectionString, usuario, senha);
+                System.out.println("Conexao OK");
             } catch (Exception ex) {
                 System.out.println("Falha na Conexao");
                 System.out.println(ex.toString() + ex.getMessage());
             }
-	}
+        }
 
-	return connection;
+	    return connection;
     }
-   
+
     public void fecharConexao() {
         if (connection != null) {
-	    try {
+            try {
                 connection.close();
             } catch (SQLException ex) {
                 System.out.println(ex.toString());

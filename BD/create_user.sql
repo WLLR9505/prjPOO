@@ -1,4 +1,4 @@
-/*
+﻿/*
     Executar com privilégios DBA para criar o usuário que será usado pela aplicação, quando necessário.
     Não precisa executar no Lab, já que lá este usuário já existe.
 */
