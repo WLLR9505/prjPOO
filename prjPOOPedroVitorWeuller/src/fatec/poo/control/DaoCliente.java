@@ -95,7 +95,7 @@ public class DaoCliente {
     public void excluir(Cliente c) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("DELETE FROM CLiente WHERE cpf = ?");
+            ps = conn.prepareStatement("DELETE FROM Cliente WHERE cpf = ?");
             ps.setString(1, c.getCpf());
             ps.execute();
         } catch (SQLException ex) {

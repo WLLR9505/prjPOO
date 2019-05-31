@@ -10,6 +10,7 @@ package fatec.poo.view;
 import fatec.poo.control.Conexao;
 import fatec.poo.control.DaoCliente;
 import fatec.poo.model.Cliente;
+import javax.swing.JOptionPane;
 
 public class frmCadastroCliente extends javax.swing.JFrame {
     private Conexao conexao;
@@ -148,6 +149,11 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnSair.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/exit.png"))); // NOI18N
@@ -298,6 +304,15 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        if (Cliente.validarCPF(ftfCpf.getValue().toString())) {
+            System.out.println("!");
+        } else {
+            JOptionPane.showMessageDialog(this, "CPF inválido", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
+            ftfCpf.setValue(null);
+            ftfCpf.requestFocus();
+        }
+
+        /*
         cliente = daoCliente.consultar(ftfCpf.getValue().toString());
 
         txtNome.setEnabled(true);
@@ -310,6 +325,10 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         txtLimCre.setEnabled(true);
         btnAlterar.setEnabled(true);
         btnExcluir.setEnabled(true);
+
+        btnConsultar.setEnabled(false);
+        ftfCpf.setEnabled(false);
+        txtNome.requestFocus();
 
         if (cliente == null) {
             btnIncluir.setEnabled(true);
@@ -325,6 +344,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
             txtLimCre.setText(cliente.getLimiteCred() + "");
             lblLimDis.setText(cliente.getLimiteDisp() + "");
         }
+        */
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
@@ -351,6 +371,10 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         
         daoCliente.alterar(cliente);
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments

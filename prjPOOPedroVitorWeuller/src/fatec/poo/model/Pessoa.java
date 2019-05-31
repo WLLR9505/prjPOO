@@ -75,4 +75,41 @@ public abstract class Pessoa {
     public String getTelefone(){
         return telefone;
     }
+
+    public static boolean validarCPF(String cpf) {
+        int soma=0, i, j, d1=0, d2=0;
+        
+        if (cpf.length() != 11 ||
+            cpf.equals("00000000000") ||
+            cpf.equals("11111111111") ||
+            cpf.equals("22222222222") ||
+            cpf.equals("33333333333") ||
+            cpf.equals("44444444444") ||
+            cpf.equals("55555555555") ||
+            cpf.equals("66666666666") ||
+            cpf.equals("77777777777") ||
+            cpf.equals("88888888888") ||
+            cpf.equals("99999999999")
+        ) return false;
+
+        for (i=0; i<9; i++) {
+            soma += Character.getNumericValue(cpf.charAt(i)) * (i+1);
+        }
+
+        d1 = soma % 11;
+        if (d1 == 10) d1 = 0;
+
+        if (Character.getNumericValue(cpf.charAt(9)) != d1) return false;
+
+        for (i=0, j=11; i<10; i++, j--) {
+            d2 += Character.getNumericValue(cpf.charAt(i)) * j;
+        }
+
+        d2 = (d2*10)%11;
+        if (d2 == 10) d2 = 0;
+
+        if (Character.getNumericValue(cpf.charAt(10)) != d2) return false;
+
+        return true;
+    }
 }
