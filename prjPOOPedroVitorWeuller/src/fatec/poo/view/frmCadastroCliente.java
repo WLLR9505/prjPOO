@@ -102,6 +102,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         }
         ftfCpf.setText("");
         ftfCpf.setName(""); // NOI18N
+        ftfCpf.setValue("");
 
         txtNome.setEnabled(false);
 
@@ -305,46 +306,42 @@ public class frmCadastroCliente extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         if (Cliente.validarCPF(ftfCpf.getValue().toString())) {
-            System.out.println("!");
+            cliente = daoCliente.consultar(ftfCpf.getValue().toString());
+
+            txtNome.setEnabled(true);
+            txtEndereco.setEnabled(true);
+            txtCidade.setEnabled(true);
+            cboUf.setEnabled(true);
+            txtDdd.setEnabled(true);
+            txtTelefone.setEnabled(true);
+            ftfCep.setEnabled(true);
+            txtLimCre.setEnabled(true);
+            btnAlterar.setEnabled(true);
+            btnExcluir.setEnabled(true);
+
+            btnConsultar.setEnabled(false);
+            ftfCpf.setEnabled(false);
+            txtNome.requestFocus();
+
+            if (cliente == null) {
+                btnIncluir.setEnabled(true);
+            } else {
+                txtNome.setText(cliente.getNome());
+                txtEndereco.setText(cliente.getEndereco());
+                txtCidade.setText(cliente.getCidade());
+                ftfCep.setValue(cliente.getCep());
+                cboUf.setSelectedItem(cliente.getUf());
+                txtDdd.setText(cliente.getDdd());
+                txtTelefone.setText(cliente.getTelefone());
+                ftfCep.setText(cliente.getCep());
+                txtLimCre.setText(cliente.getLimiteCred() + "");
+                lblLimDis.setText(cliente.getLimiteDisp() + "");
+            }
         } else {
             JOptionPane.showMessageDialog(this, "CPF inválido", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
-            ftfCpf.setValue(null);
+            ftfCpf.setValue("");
             ftfCpf.requestFocus();
         }
-
-        /*
-        cliente = daoCliente.consultar(ftfCpf.getValue().toString());
-
-        txtNome.setEnabled(true);
-        txtEndereco.setEnabled(true);
-        txtCidade.setEnabled(true);
-        cboUf.setEnabled(true);
-        txtDdd.setEnabled(true);
-        txtTelefone.setEnabled(true);
-        ftfCep.setEnabled(true);
-        txtLimCre.setEnabled(true);
-        btnAlterar.setEnabled(true);
-        btnExcluir.setEnabled(true);
-
-        btnConsultar.setEnabled(false);
-        ftfCpf.setEnabled(false);
-        txtNome.requestFocus();
-
-        if (cliente == null) {
-            btnIncluir.setEnabled(true);
-        } else {
-            txtNome.setText(cliente.getNome());
-            txtEndereco.setText(cliente.getEndereco());
-            txtCidade.setText(cliente.getCidade());
-            ftfCep.setValue(cliente.getCep());
-            cboUf.setSelectedItem(cliente.getUf());
-            txtDdd.setText(cliente.getDdd());
-            txtTelefone.setText(cliente.getTelefone());
-            ftfCep.setText(cliente.getCep());
-            txtLimCre.setText(cliente.getLimiteCred() + "");
-            lblLimDis.setText(cliente.getLimiteDisp() + "");
-        }
-        */
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
@@ -355,6 +352,8 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         cliente.setDdd(txtDdd.getText());
         cliente.setTelefone(txtTelefone.getText());
         cliente.setCep(ftfCep.getValue().toString());
+        
+        btnIncluir.setEnabled(false);
 
         daoCliente.inserir(cliente);
     }//GEN-LAST:event_btnIncluirActionPerformed
@@ -373,7 +372,35 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
+        daoCliente.excluir(cliente);
+
+        ftfCpf.setValue("");
+        txtNome.setText("");
+        txtEndereco.setText("");
+        txtCidade.setText("");
+        ftfCep.setValue("");
+        cboUf.setSelectedIndex(0);
+        txtDdd.setText("");
+        txtTelefone.setText("");
+        ftfCep.setText("");
+        txtLimCre.setText("");
+        lblLimDis.setText("");
+        
+        txtNome.setEnabled(false);
+        txtEndereco.setEnabled(false);
+        txtCidade.setEnabled(false);
+        cboUf.setEnabled(false);
+        txtDdd.setEnabled(false);
+        txtTelefone.setEnabled(false);
+        ftfCep.setEnabled(false);
+        txtLimCre.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnConsultar.setEnabled(true);
+        ftfCpf.setEnabled(true);
+        ftfCpf.requestFocus();
+
+        cliente = null;
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**

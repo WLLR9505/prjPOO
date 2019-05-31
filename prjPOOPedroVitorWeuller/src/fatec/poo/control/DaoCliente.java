@@ -17,16 +17,17 @@ public class DaoCliente {
     public void inserir(Cliente c) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("INSERT INTO Cliente (cpf, nome, endereco, cidade, cep, ddd, telefone, limiteCred, limiteDisp) VALUES(?,?,?,?,?,?,?,?,?)");
+            ps = conn.prepareStatement("INSERT INTO Cliente (cpf, nome, endereco, cidade, uf, cep, ddd, telefone, limiteCred, limiteDisp) VALUES(?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, c.getCpf());
             ps.setString(2, c.getNome());
             ps.setString(3, c.getEndereco());
             ps.setString(4, c.getCidade());
-            ps.setString(5, c.getCep());
-            ps.setString(6, c.getDdd());
-            ps.setString(7, c.getTelefone());
-            ps.setDouble(8, c.getLimiteCred());
-            ps.setDouble(9, c.getLimiteDisp());
+            ps.setString(5, c.getUf());
+            ps.setString(6, c.getCep());
+            ps.setString(7, c.getDdd());
+            ps.setString(8, c.getTelefone());
+            ps.setDouble(9, c.getLimiteCred());
+            ps.setDouble(10, c.getLimiteDisp());
 
             ps.execute();
         } catch (SQLException ex) {
