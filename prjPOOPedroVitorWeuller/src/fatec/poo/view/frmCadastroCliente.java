@@ -1,9 +1,21 @@
+/*  NOTA PARA PROF. DIMAS
+Campos do tipo JFormattedTextField (CPF e CEP) estão configurados para que o
+valor não contenha os caracteres da máscara. Por isso, getValeu() retorna apenas
+os caracteres úteis. Isso é feito através do método
+setValueContainsLiteralCharacters do MaskFormatter usado pelo campo.
+*/
+
 package fatec.poo.view;
 
 import fatec.poo.control.Conexao;
+import fatec.poo.control.DaoCliente;
+import fatec.poo.model.Cliente;
 
 public class frmCadastroCliente extends javax.swing.JFrame {
-
+    private Conexao conexao;
+    Cliente cliente;
+    DaoCliente daoCliente;
+    
     /**
      * Creates new form frmCadastroCliente
      */
@@ -41,9 +53,9 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         btnAlterar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
-        lblLmtCrdt = new javax.swing.JLabel();
         lblLimDis = new javax.swing.JLabel();
         ftfCep = new javax.swing.JFormattedTextField();
+        txtLimCre = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Cliente");
@@ -81,10 +93,13 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         jLabel10.setText("Limite Disponível");
 
         try {
-            ftfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("###.###.###-##");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        ftfCpf.setText("");
         ftfCpf.setName(""); // NOI18N
 
         txtNome.setEnabled(false);
@@ -97,7 +112,6 @@ public class frmCadastroCliente extends javax.swing.JFrame {
 
         txtTelefone.setEnabled(false);
 
-        cboUf.setEditable(true);
         cboUf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
         cboUf.setEnabled(false);
 
@@ -114,6 +128,11 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/add.png"))); // NOI18N
         btnIncluir.setText("Incluir");
         btnIncluir.setEnabled(false);
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
@@ -134,17 +153,19 @@ public class frmCadastroCliente extends javax.swing.JFrame {
             }
         });
 
-        lblLmtCrdt.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        lblLmtCrdt.setEnabled(false);
-
         lblLimDis.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         lblLimDis.setEnabled(false);
 
         try {
-            ftfCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("#####-###");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        ftfCep.setEnabled(false);
+
+        txtLimCre.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,19 +198,22 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                         .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtLimCre)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(txtDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(ftfCep, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblLmtCrdt, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(ftfCep, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
@@ -238,9 +262,9 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel7)
-                    .addComponent(lblLmtCrdt, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLimCre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConsultar)
@@ -251,7 +275,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblLimDis, lblLmtCrdt, txtTelefone});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblLimDis, txtTelefone});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -265,12 +289,42 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         conexao = new Conexao("BD1711006", "occupyMars");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
-        conexao.conectar();
+        daoCliente = new DaoCliente(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
-        // Select one row based on CPF
+        System.out.println(ftfCpf.getValue());
+        cliente = daoCliente.consultar(ftfCpf.getValue().toString());
+
+        if (cliente == null) {
+            txtNome.setEnabled(true);
+            txtEndereco.setEnabled(true);
+            txtCidade.setEnabled(true);
+            cboUf.setEnabled(true);
+            txtDdd.setEnabled(true);
+            txtTelefone.setEnabled(true);
+            ftfCep.setEnabled(true);
+            txtLimCre.setEnabled(true);
+            btnIncluir.setEnabled(true);
+            btnAlterar.setEnabled(true);
+            btnExcluir.setEnabled(true);
+        } else {
+            
+        }
     }//GEN-LAST:event_btnConsultarActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        System.out.println(ftfCpf.getValue());
+        
+        cliente = new Cliente(ftfCpf.getValue().toString(), txtNome.getText(), Double.parseDouble(txtLimCre.getText()));
+        cliente.setEndereco(txtEndereco.getText());
+        cliente.setCidade(txtCidade.getText());
+        cliente.setDdd(txtDdd.getText());
+        cliente.setTelefone(txtTelefone.getText());
+        cliente.setCep(ftfCep.getValue().toString());
+        
+        daoCliente.inserir(cliente);
+    }//GEN-LAST:event_btnIncluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -326,12 +380,11 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblLimDis;
-    private javax.swing.JLabel lblLmtCrdt;
     private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtDdd;
     private javax.swing.JTextField txtEndereco;
+    private javax.swing.JTextField txtLimCre;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
-    private Conexao conexao;
 }
