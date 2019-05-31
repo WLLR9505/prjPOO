@@ -195,9 +195,6 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                         .addComponent(cboUf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtEndereco)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtLimCre)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -213,7 +210,10 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
-                                .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
@@ -293,23 +293,34 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
-        System.out.println(ftfCpf.getValue());
+        System.out.println(ftfCpf.getValue().toString());
+        
         cliente = daoCliente.consultar(ftfCpf.getValue().toString());
 
+        txtNome.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtCidade.setEnabled(true);
+        cboUf.setEnabled(true);
+        txtDdd.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        ftfCep.setEnabled(true);
+        txtLimCre.setEnabled(true);
+        btnAlterar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        
         if (cliente == null) {
-            txtNome.setEnabled(true);
-            txtEndereco.setEnabled(true);
-            txtCidade.setEnabled(true);
-            cboUf.setEnabled(true);
-            txtDdd.setEnabled(true);
-            txtTelefone.setEnabled(true);
-            ftfCep.setEnabled(true);
-            txtLimCre.setEnabled(true);
             btnIncluir.setEnabled(true);
-            btnAlterar.setEnabled(true);
-            btnExcluir.setEnabled(true);
         } else {
-            
+            txtNome.setText(cliente.getNome());
+            txtEndereco.setText(cliente.getEndereco());
+            txtCidade.setText(cliente.getCidade());
+            ftfCep.setValue(cliente.getCep());
+            cboUf.setSelectedItem(cliente.getUf());
+            txtDdd.setText(cliente.getDdd());
+            txtTelefone.setText(cliente.getTelefone());
+            ftfCep.setText(cliente.getCep());
+            txtLimCre.setText(cliente.getLimiteCred() + "");
+            lblLimDis.setText(cliente.getLimiteDisp() + "");
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 

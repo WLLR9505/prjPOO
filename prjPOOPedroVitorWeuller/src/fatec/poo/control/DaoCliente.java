@@ -66,7 +66,7 @@ public class DaoCliente {
 
     public Cliente consultar (String cpf) {
         Cliente c = null;
-       
+
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("SELECT * FROM Cliente WHERE cpf = ?");
@@ -76,6 +76,12 @@ public class DaoCliente {
 
             if (rs.next() == true) {
                 c = new Cliente (cpf, rs.getString("nome"), rs.getDouble("limiteCred"));
+                c.setEndereco(rs.getString("endereco"));
+                c.setCidade(rs.getString("cidade"));
+                c.setUf(rs.getString("uf"));
+                c.setCep(rs.getString("cep"));
+                c.setDdd(rs.getString("ddd"));
+                c.setTelefone(rs.getString("telefone"));
             }
         }
         catch (SQLException ex) {
