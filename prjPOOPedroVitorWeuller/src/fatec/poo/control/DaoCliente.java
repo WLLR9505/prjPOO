@@ -41,6 +41,7 @@ public class DaoCliente {
                 "nome = ?,"+
                 "endereco = ?,"+
                 "cidade = ?,"+
+                "uf = ?,"+
                 "cep = ?,"+
                 "ddd = ?,"+
                 "telefone = ?,"+
@@ -51,12 +52,13 @@ public class DaoCliente {
             ps.setString(1, c.getNome());
             ps.setString(2, c.getEndereco());
             ps.setString(3, c.getCidade());
-            ps.setString(4, c.getCep());
-            ps.setString(5, c.getDdd());
-            ps.setString(6, c.getTelefone());
-            ps.setDouble(7, c.getLimiteCred());
-            ps.setDouble(8, c.getLimiteDisp());
-            ps.setString(9, c.getCpf());
+            ps.setString(4, c.getUf());
+            ps.setString(5, c.getCep());
+            ps.setString(6, c.getDdd());
+            ps.setString(7, c.getTelefone());
+            ps.setDouble(8, c.getLimiteCred());
+            ps.setDouble(9, c.getLimiteDisp());
+            ps.setString(10, c.getCpf());
 
             ps.execute();
         } catch (SQLException ex) {

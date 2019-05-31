@@ -138,6 +138,11 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
         btnAlterar.setText("Alterar");
         btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
@@ -293,8 +298,6 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
-        System.out.println(ftfCpf.getValue().toString());
-        
         cliente = daoCliente.consultar(ftfCpf.getValue().toString());
 
         txtNome.setEnabled(true);
@@ -307,7 +310,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         txtLimCre.setEnabled(true);
         btnAlterar.setEnabled(true);
         btnExcluir.setEnabled(true);
-        
+
         if (cliente == null) {
             btnIncluir.setEnabled(true);
         } else {
@@ -325,17 +328,29 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        System.out.println(ftfCpf.getValue());
-        
         cliente = new Cliente(ftfCpf.getValue().toString(), txtNome.getText(), Double.parseDouble(txtLimCre.getText()));
         cliente.setEndereco(txtEndereco.getText());
         cliente.setCidade(txtCidade.getText());
+        cliente.setUf(cboUf.getSelectedItem().toString());
+        cliente.setDdd(txtDdd.getText());
+        cliente.setTelefone(txtTelefone.getText());
+        cliente.setCep(ftfCep.getValue().toString());
+
+        daoCliente.inserir(cliente);
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        cliente.setNome(txtNome.getText());
+        cliente.setLimiteCred(Double.parseDouble(txtLimCre.getText()));
+        cliente.setEndereco(txtEndereco.getText());
+        cliente.setCidade(txtCidade.getText());
+        cliente.setUf(cboUf.getSelectedItem().toString());
         cliente.setDdd(txtDdd.getText());
         cliente.setTelefone(txtTelefone.getText());
         cliente.setCep(ftfCep.getValue().toString());
         
-        daoCliente.inserir(cliente);
-    }//GEN-LAST:event_btnIncluirActionPerformed
+        daoCliente.alterar(cliente);
+    }//GEN-LAST:event_btnAlterarActionPerformed
 
     /**
      * @param args the command line arguments
