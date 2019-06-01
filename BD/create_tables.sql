@@ -3,8 +3,9 @@ create table Cliente (
     nome varchar2(128),
     endereco varchar2(128),
     cidade varchar2(64),
-    cep varchar2(8), /* "99999999" */
-    ddd varchar2(3), /* "999" */
+    uf varchar2(2), /* SP */
+    cep varchar2(8), /* "XXXXXXXX" */
+    ddd varchar2(2), /* "XX" */
     telefone varchar2(9), /* "999999999" */
     limiteCred Number(16, 2), /* 99999999999999.99 */
     limiteDisp Number(16, 2) /* 99999999999999.99 */

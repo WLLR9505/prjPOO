@@ -10,6 +10,7 @@ package fatec.poo.view;
 import fatec.poo.control.Conexao;
 import fatec.poo.control.DaoCliente;
 import fatec.poo.model.Cliente;
+import javax.swing.JOptionPane;
 
 public class frmCadastroCliente extends javax.swing.JFrame {
     private Conexao conexao;
@@ -101,6 +102,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         }
         ftfCpf.setText("");
         ftfCpf.setName(""); // NOI18N
+        ftfCpf.setValue("");
 
         txtNome.setEnabled(false);
 
@@ -138,11 +140,21 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
         btnAlterar.setText("Alterar");
         btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnSair.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/exit.png"))); // NOI18N
@@ -195,9 +207,6 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                         .addComponent(cboUf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtEndereco)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtLimCre)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -213,7 +222,10 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
-                                .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(lblLimDis, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
@@ -293,10 +305,9 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
-        System.out.println(ftfCpf.getValue());
-        cliente = daoCliente.consultar(ftfCpf.getValue().toString());
+        if (Cliente.validarCPF(ftfCpf.getValue().toString())) {
+            cliente = daoCliente.consultar(ftfCpf.getValue().toString());
 
-        if (cliente == null) {
             txtNome.setEnabled(true);
             txtEndereco.setEnabled(true);
             txtCidade.setEnabled(true);
@@ -305,26 +316,92 @@ public class frmCadastroCliente extends javax.swing.JFrame {
             txtTelefone.setEnabled(true);
             ftfCep.setEnabled(true);
             txtLimCre.setEnabled(true);
-            btnIncluir.setEnabled(true);
             btnAlterar.setEnabled(true);
             btnExcluir.setEnabled(true);
+
+            btnConsultar.setEnabled(false);
+            ftfCpf.setEnabled(false);
+            txtNome.requestFocus();
+
+            if (cliente == null) {
+                btnIncluir.setEnabled(true);
+            } else {
+                txtNome.setText(cliente.getNome());
+                txtEndereco.setText(cliente.getEndereco());
+                txtCidade.setText(cliente.getCidade());
+                ftfCep.setValue(cliente.getCep());
+                cboUf.setSelectedItem(cliente.getUf());
+                txtDdd.setText(cliente.getDdd());
+                txtTelefone.setText(cliente.getTelefone());
+                ftfCep.setText(cliente.getCep());
+                txtLimCre.setText(cliente.getLimiteCred() + "");
+                lblLimDis.setText(cliente.getLimiteDisp() + "");
+            }
         } else {
-            
+            JOptionPane.showMessageDialog(this, "CPF inválido", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
+            ftfCpf.setValue("");
+            ftfCpf.requestFocus();
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        System.out.println(ftfCpf.getValue());
-        
         cliente = new Cliente(ftfCpf.getValue().toString(), txtNome.getText(), Double.parseDouble(txtLimCre.getText()));
         cliente.setEndereco(txtEndereco.getText());
         cliente.setCidade(txtCidade.getText());
+        cliente.setUf(cboUf.getSelectedItem().toString());
         cliente.setDdd(txtDdd.getText());
         cliente.setTelefone(txtTelefone.getText());
         cliente.setCep(ftfCep.getValue().toString());
         
+        btnIncluir.setEnabled(false);
+
         daoCliente.inserir(cliente);
     }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        cliente.setNome(txtNome.getText());
+        cliente.setLimiteCred(Double.parseDouble(txtLimCre.getText()));
+        cliente.setEndereco(txtEndereco.getText());
+        cliente.setCidade(txtCidade.getText());
+        cliente.setUf(cboUf.getSelectedItem().toString());
+        cliente.setDdd(txtDdd.getText());
+        cliente.setTelefone(txtTelefone.getText());
+        cliente.setCep(ftfCep.getValue().toString());
+        
+        daoCliente.alterar(cliente);
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        daoCliente.excluir(cliente);
+
+        ftfCpf.setValue("");
+        txtNome.setText("");
+        txtEndereco.setText("");
+        txtCidade.setText("");
+        ftfCep.setValue("");
+        cboUf.setSelectedIndex(0);
+        txtDdd.setText("");
+        txtTelefone.setText("");
+        ftfCep.setText("");
+        txtLimCre.setText("");
+        lblLimDis.setText("");
+        
+        txtNome.setEnabled(false);
+        txtEndereco.setEnabled(false);
+        txtCidade.setEnabled(false);
+        cboUf.setEnabled(false);
+        txtDdd.setEnabled(false);
+        txtTelefone.setEnabled(false);
+        ftfCep.setEnabled(false);
+        txtLimCre.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnConsultar.setEnabled(true);
+        ftfCpf.setEnabled(true);
+        ftfCpf.requestFocus();
+
+        cliente = null;
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
