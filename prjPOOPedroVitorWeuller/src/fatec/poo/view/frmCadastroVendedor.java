@@ -358,9 +358,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         vendedor.setTelefone(txtTelefone.getText());
         vendedor.setCep(ftfCep.getValue().toString());
 
-        modoEdicao();
-
         daoVendedor.inserir(vendedor);
+        modoEdicao();
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
