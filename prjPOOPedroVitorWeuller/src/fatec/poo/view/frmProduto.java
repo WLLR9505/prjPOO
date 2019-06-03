@@ -13,9 +13,6 @@ public class frmProduto extends javax.swing.JFrame {
     Produto produto;
     DecimalFormat df = new DecimalFormat("#0.00");
 
-    /**
-     * Creates new form frmProduto
-     */
     public frmProduto() {
         initComponents();
         modoConsulta();
