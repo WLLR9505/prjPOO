@@ -274,10 +274,10 @@ public class frmProduto extends javax.swing.JFrame {
             txtCodigo.getText(),
             txtDescricao.getText()
         );
-        produto.setQtdeEstoque(Double.parseDouble(txtQuaDis.getText()));
+        produto.setQtdeEstoque(stringParaDouble(txtQuaDis.getText()));
         produto.setUnidadeMedida(cboUniMed.getSelectedItem().toString());
-        produto.setPreco(Double.parseDouble(txtPreUni.getText()));
-        produto.setEstoqueMinimo(Double.parseDouble(txtEstMin.getText()));
+        produto.setPreco(stringParaDouble(txtPreUni.getText()));
+        produto.setEstoqueMinimo(stringParaDouble(txtEstMin.getText()));
 
         daoProduto.inserir(produto);
         modoEdicao();
@@ -285,11 +285,11 @@ public class frmProduto extends javax.swing.JFrame {
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         produto.setDescricao(txtDescricao.getText());
-        produto.setQtdeEstoque(Double.parseDouble(txtQuaDis.getText()));
+        produto.setQtdeEstoque(stringParaDouble(txtQuaDis.getText()));
         produto.setUnidadeMedida(cboUniMed.getSelectedItem().toString());
-        produto.setPreco(Double.parseDouble(txtPreUni.getText()));
-        produto.setEstoqueMinimo(Double.parseDouble(txtEstMin.getText()));
-        
+        produto.setPreco(stringParaDouble(txtPreUni.getText()));
+        produto.setEstoqueMinimo(stringParaDouble(txtEstMin.getText()));
+
         daoProduto.alterar(produto);
         modoEdicao();
     }//GEN-LAST:event_btnAlterarActionPerformed
@@ -371,6 +371,14 @@ public class frmProduto extends javax.swing.JFrame {
         btnIncluir.setEnabled(false);
         btnAlterar.setEnabled(true);
         btnExcluir.setEnabled(true);
+    }
+    
+    private double stringParaDouble(String str){
+        // Se campo nao for preenchido, retorna zero
+        if (str.length() == 0) return 0.0;
+
+        str = str.replace(",", ".");
+        return Double.parseDouble(str);
     }
 
     public static boolean isInteger(String s) {
