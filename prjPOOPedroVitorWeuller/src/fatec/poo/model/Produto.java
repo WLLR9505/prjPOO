@@ -36,6 +36,10 @@ public class Produto {
         this.estoqueMinimo = estoqueMinimo;
     }
 
+    public String getCodigo(){
+        return codigo;
+    }
+    
     public String getDescricao() {
         return descricao;
     }

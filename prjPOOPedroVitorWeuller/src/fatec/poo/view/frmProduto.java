@@ -1,10 +1,15 @@
 package fatec.poo.view;
 
-public class frmProduto extends javax.swing.JFrame {
+import fatec.poo.control.Conexao;
+import fatec.poo.control.DaoProduto;
+import fatec.poo.model.Produto;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form frmProduto
-     */
+public class frmProduto extends javax.swing.JFrame {
+    private Conexao conexao;
+    Produto produto;
+    DaoProduto daoProduto;
+
     public frmProduto() {
         initComponents();
     }
@@ -36,6 +41,11 @@ public class frmProduto extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Produto");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Código");
@@ -65,6 +75,11 @@ public class frmProduto extends javax.swing.JFrame {
         btnConsultar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnConsultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
         btnConsultar.setText("Consultar");
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/add.png"))); // NOI18N
@@ -168,6 +183,61 @@ public class frmProduto extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnSairActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("BD1711006", "occupyMars");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        //conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
+        daoProduto = new DaoProduto(conexao.conectar());
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        System.out.println("Hello");
+        /*if (Produto.validarCPF(ftfCpf.getValue().toString())) {
+            cliente = daoCliente.consultar(ftfCpf.getValue().toString());
+
+            txtNome.setEnabled(true);
+            txtEndereco.setEnabled(true);
+            txtCidade.setEnabled(true);
+            cboUf.setEnabled(true);
+            txtDdd.setEnabled(true);
+            txtTelefone.setEnabled(true);
+            ftfCep.setEnabled(true);
+            txtLimCre.setEnabled(true);
+            btnAlterar.setEnabled(true);
+            btnExcluir.setEnabled(true);
+
+            btnConsultar.setEnabled(false);
+            ftfCpf.setEnabled(false);
+            txtNome.requestFocus();
+
+            if (cliente == null) {
+                btnIncluir.setEnabled(true);
+            } else {
+                txtNome.setText(cliente.getNome());
+                txtEndereco.setText(cliente.getEndereco());
+                txtCidade.setText(cliente.getCidade());
+                ftfCep.setValue(cliente.getCep());
+                cboUf.setSelectedItem(cliente.getUf());
+                txtDdd.setText(cliente.getDdd());
+                txtTelefone.setText(cliente.getTelefone());
+                ftfCep.setText(cliente.getCep());
+                txtLimCre.setText(cliente.getLimiteCred() + "");
+                lblLimDis.setText(cliente.getLimiteDisp() + "");
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "CPF inválido",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
+            ftfCpf.setValue("");
+            ftfCpf.requestFocus();
+        } */      
+    }//GEN-LAST:event_btnConsultarActionPerformed
+
+        
     /**
      * @param args the command line arguments
      */
