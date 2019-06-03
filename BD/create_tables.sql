@@ -42,6 +42,7 @@ create table Vendedor (
     nome varchar2(128),
     endereco varchar2(128),
     cidade varchar2(64),
+    uf varchar2(2),
     cep varchar2(8),
     ddd varchar2(3),
     telefone varchar2(9),

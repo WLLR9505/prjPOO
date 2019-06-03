@@ -16,10 +16,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     private Conexao conexao;
     Cliente cliente;
     DaoCliente daoCliente;
-    
-    /**
-     * Creates new form frmCadastroCliente
-     */
+
     public frmCadastroCliente() {
         initComponents();
     }
@@ -103,6 +100,11 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         ftfCpf.setText("");
         ftfCpf.setName(""); // NOI18N
         ftfCpf.setValue("");
+        ftfCpf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarActionPerformed(evt);
+            }
+        });
 
         txtNome.setEnabled(false);
 
@@ -297,7 +299,6 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // connect to DB
         conexao = new Conexao("BD1711006", "occupyMars");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
         conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");

@@ -9,7 +9,7 @@ import fatec.poo.model.Cliente;
 
 public class DaoCliente {
     private Connection conn;
-    
+
     public DaoCliente(Connection conn) {
          this.conn = conn;
     }
@@ -31,10 +31,10 @@ public class DaoCliente {
 
             ps.execute();
         } catch (SQLException ex) {
-             System.out.println(ex.toString());   
+             System.out.println(ex.toString());
         }
     }
-    
+
     public void alterar(Cliente c) {
         PreparedStatement ps = null;
         try {
@@ -85,6 +85,7 @@ public class DaoCliente {
                 c.setCep(rs.getString("cep"));
                 c.setDdd(rs.getString("ddd"));
                 c.setTelefone(rs.getString("telefone"));
+                c.setLimiteDisp(rs.getDouble("limiteDisp"));
             }
         }
         catch (SQLException ex) {
