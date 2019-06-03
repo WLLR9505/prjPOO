@@ -1,12 +1,26 @@
+/*  NOTA PARA PROF. DIMAS
+Campos do tipo JFormattedTextField (CPF, CEP e Taxa de Comissão) estão
+configurados para que o valor não contenha os caracteres da máscara.
+Por isso, getValeu() retorna apenas os caracteres úteis. Isso é feito
+através do método setValueContainsLiteralCharacters do MaskFormatter
+usado pelo campo.
+*/
+
 package fatec.poo.view;
 
-public class frmCadastroVendedor extends javax.swing.JFrame {
+import fatec.poo.control.Conexao;
+import fatec.poo.control.DaoVendedor;
+import fatec.poo.model.Vendedor;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form frmCadastroVendedor
-     */
+public class frmCadastroVendedor extends javax.swing.JFrame {
+    private Conexao conexao;
+    Vendedor vendedor;
+    DaoVendedor daoVendedor;
+
     public frmCadastroVendedor() {
         initComponents();
+        modoBusca();
     }
 
     /**
@@ -39,12 +53,17 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         btnAlterar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
-        lblSalBas = new javax.swing.JLabel();
-        lblTaxCom = new javax.swing.JLabel();
         ftfCep = new javax.swing.JFormattedTextField();
+        txtSalBas = new javax.swing.JTextField();
+        ftfTaxCom = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Vendedor");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("CPF");
@@ -74,10 +93,17 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         jLabel9.setText("Taxa de Comissão");
 
         try {
-            ftfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("###.###.###-##");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        ftfCpf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarActionPerformed(evt);
+            }
+        });
 
         txtNome.setEnabled(false);
 
@@ -95,21 +121,41 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         btnConsultar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnConsultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
         btnConsultar.setText("Consultar");
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/add.png"))); // NOI18N
         btnIncluir.setText("Incluir");
         btnIncluir.setEnabled(false);
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
         btnAlterar.setText("Alterar");
         btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnSair.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/exit.png"))); // NOI18N
@@ -120,14 +166,21 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
             }
         });
 
-        lblSalBas.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        lblSalBas.setEnabled(false);
+        try {
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("#####-###");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        ftfCep.setEnabled(false);
 
-        lblTaxCom.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        lblTaxCom.setEnabled(false);
+        txtSalBas.setEnabled(false);
 
         try {
-            ftfCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#####-###")));
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("##,## %");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfTaxCom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -159,15 +212,26 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(ftfCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtEndereco, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ftfCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(txtCidade, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                                            .addGap(26, 26, 26))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel9)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(ftfCep, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jLabel8)))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(ftfCep, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(86, 86, 86)
-                                        .addComponent(jLabel8))
-                                    .addComponent(txtCidade))
-                                .addGap(26, 26, 26)
+                                        .addComponent(txtSalBas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(146, 146, 146)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel7)
@@ -176,15 +240,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(txtDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(txtEndereco, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblSalBas, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblTaxCom, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(ftfTaxCom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -220,10 +277,10 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblTaxCom, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(lblSalBas, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(txtSalBas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(ftfTaxCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConsultar)
@@ -240,6 +297,88 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         dispose();
     }//GEN-LAST:event_btnSairActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao("BD1711006", "occupyMars");
+        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
+        daoVendedor = new DaoVendedor(conexao.conectar());
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        if (Vendedor.validarCPF(ftfCpf.getValue().toString())) {
+            vendedor = daoVendedor.consultar(ftfCpf.getValue().toString());
+
+            if (vendedor == null) {
+                modoInsercao();
+                btnIncluir.setEnabled(true);
+            } else {
+                modoEdicao();
+                txtNome.setText(vendedor.getNome());
+                txtEndereco.setText(vendedor.getEndereco());
+                txtCidade.setText(vendedor.getCidade());
+                ftfCep.setValue(vendedor.getCep());
+                cboUf.setSelectedItem(vendedor.getUf());
+                txtDdd.setText(vendedor.getDdd());
+                txtTelefone.setText(vendedor.getTelefone());
+                ftfCep.setText(vendedor.getCep());
+                txtSalBas.setText(vendedor.getSalarioBase() + "");
+                ftfTaxCom.setValue(vendedor.getTaxaComissao() * 10000);
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "CPF inválido",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
+            ftfCpf.setValue("");
+            ftfCpf.requestFocus();
+        }
+    }//GEN-LAST:event_btnConsultarActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        double tc;
+        if (ftfTaxCom.getValue() == null) tc = 0.0;
+        else tc = Double.parseDouble(ftfTaxCom.getValue().toString()) / 10000;
+
+        vendedor = new Vendedor(
+            ftfCpf.getValue().toString(),
+            txtNome.getText(),
+            Double.parseDouble(txtSalBas.getText())
+        );
+        vendedor.setTaxaComissao(tc);
+        vendedor.setEndereco(txtEndereco.getText());
+        vendedor.setCidade(txtCidade.getText());
+        vendedor.setUf(cboUf.getSelectedItem().toString());
+        vendedor.setDdd(txtDdd.getText());
+        vendedor.setTelefone(txtTelefone.getText());
+        vendedor.setCep(ftfCep.getValue().toString());
+
+        modoEdicao();
+
+        daoVendedor.inserir(vendedor);
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        vendedor.setNome(txtNome.getText());
+        vendedor.setSalarioBase(Double.parseDouble(txtSalBas.getText()));
+        vendedor.setTaxaComissao(Double.parseDouble(ftfTaxCom.getText()));
+        vendedor.setEndereco(txtEndereco.getText());
+        vendedor.setCidade(txtCidade.getText());
+        vendedor.setUf(cboUf.getSelectedItem().toString());
+        vendedor.setDdd(txtDdd.getText());
+        vendedor.setTelefone(txtTelefone.getText());
+        vendedor.setCep(ftfCep.getValue().toString());
+
+        daoVendedor.alterar(vendedor);
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        daoVendedor.excluir(vendedor);
+        vendedor = null;
+        modoBusca();
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -276,6 +415,71 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         });
     }
 
+    private void modoEdicao() {
+        ftfCpf.setEnabled(false);
+        txtNome.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtCidade.setEnabled(true);
+        cboUf.setEnabled(true);
+        txtDdd.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        ftfCep.setEnabled(true);
+        txtSalBas.setEnabled(true);
+        ftfTaxCom.setEnabled(true);
+        btnAlterar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnConsultar.setEnabled(false);
+        txtNome.requestFocus();
+    }
+    
+    private void modoInsercao() {
+        ftfCpf.setEnabled(false);
+        txtNome.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtCidade.setEnabled(true);
+        cboUf.setEnabled(true);
+        txtDdd.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        ftfCep.setEnabled(true);
+        txtSalBas.setEnabled(true);
+        ftfTaxCom.setEnabled(true);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnConsultar.setEnabled(false);
+        txtNome.requestFocus();
+    }
+
+    private void modoBusca() {
+        System.out.println("Reseting form...");
+
+        ftfCpf.setValue("");
+        ftfCpf.setEnabled(true);
+        ftfCpf.requestFocus();
+        txtNome.setText("");
+        txtNome.setEnabled(false);
+        txtEndereco.setText("");
+        txtEndereco.setEnabled(false);
+        txtCidade.setText("");
+        txtCidade.setEnabled(false);
+        cboUf.setSelectedIndex(0);
+        cboUf.setEnabled(false);
+        ftfCep.setValue("");
+        ftfCep.setEnabled(false);
+        txtDdd.setText("");
+        txtDdd.setEnabled(false);
+        txtTelefone.setText("");
+        txtTelefone.setEnabled(false);
+        txtSalBas.setText("");
+        txtSalBas.setEnabled(false);
+        ftfTaxCom.setText("");
+        ftfTaxCom.setEnabled(false);
+
+        btnConsultar.setEnabled(true);
+        btnIncluir.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnConsultar;
@@ -285,6 +489,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboUf;
     private javax.swing.JFormattedTextField ftfCep;
     private javax.swing.JFormattedTextField ftfCpf;
+    private javax.swing.JFormattedTextField ftfTaxCom;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -294,12 +499,11 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblSalBas;
-    private javax.swing.JLabel lblTaxCom;
     private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtDdd;
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtSalBas;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 }
