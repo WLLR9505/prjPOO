@@ -90,7 +90,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="txtTelefone" min="-2" pref="124" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="txtTaxCom" alignment="0" min="-2" pref="98" max="-2" attributes="0"/>
+                                  <Component id="ftfTaxCom" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -135,10 +135,10 @@
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="txtTaxCom" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel9" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="txtSalBas" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel6" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="ftfTaxCom" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -386,9 +386,11 @@
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtTaxCom">
+    <Component class="javax.swing.JFormattedTextField" name="ftfTaxCom">
       <Properties>
-        <Property name="enabled" type="boolean" value="false"/>
+        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
+          <Format format="###,##%" subtype="-1" type="5"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

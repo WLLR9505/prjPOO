@@ -85,7 +85,7 @@ public class DaoVendedor {
                 v.setCep(rs.getString("cep"));
                 v.setDdd(rs.getString("ddd"));
                 v.setTelefone(rs.getString("telefone"));
-                v.setSalarioBase(rs.getDouble("salarioBase"));
+                v.setTaxaComissao(rs.getDouble("taxaComissao"));
             }
         }
         catch (SQLException ex) {

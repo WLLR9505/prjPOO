@@ -1,8 +1,9 @@
 /*  NOTA PARA PROF. DIMAS
-Campos do tipo JFormattedTextField (CPF e CEP) estão configurados para que o
-valor não contenha os caracteres da máscara. Por isso, getValeu() retorna apenas
-os caracteres úteis. Isso é feito através do método
-setValueContainsLiteralCharacters do MaskFormatter usado pelo campo.
+Campos do tipo JFormattedTextField (CPF, CEP e Taxa de Comissão) estão
+configurados para que o valor não contenha os caracteres da máscara.
+Por isso, getValeu() retorna apenas os caracteres úteis. Isso é feito
+através do método setValueContainsLiteralCharacters do MaskFormatter
+usado pelo campo.
 */
 
 package fatec.poo.view;
@@ -54,7 +55,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         btnSair = new javax.swing.JButton();
         ftfCep = new javax.swing.JFormattedTextField();
         txtSalBas = new javax.swing.JTextField();
-        txtTaxCom = new javax.swing.JTextField();
+        ftfTaxCom = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Vendedor");
@@ -176,7 +177,13 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
 
         txtSalBas.setEnabled(false);
 
-        txtTaxCom.setEnabled(false);
+        try {
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("##,## %");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfTaxCom.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -234,7 +241,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                                         .addComponent(txtDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtTaxCom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(ftfTaxCom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -270,10 +277,10 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtTaxCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
                     .addComponent(txtSalBas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(ftfTaxCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConsultar)
@@ -302,7 +309,6 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         if (Vendedor.validarCPF(ftfCpf.getValue().toString())) {
             vendedor = daoVendedor.consultar(ftfCpf.getValue().toString());
 
-
             if (vendedor == null) {
                 modoInsercao();
                 btnIncluir.setEnabled(true);
@@ -317,7 +323,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                 txtTelefone.setText(vendedor.getTelefone());
                 ftfCep.setText(vendedor.getCep());
                 txtSalBas.setText(vendedor.getSalarioBase() + "");
-                txtTaxCom.setText(vendedor.getTaxaComissao() + "");
+                ftfTaxCom.setValue(vendedor.getTaxaComissao() * 10000);
             }
         } else {
             JOptionPane.showMessageDialog(
@@ -332,12 +338,16 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        double tc;
+        if (ftfTaxCom.getValue() == null) tc = 0.0;
+        else tc = Double.parseDouble(ftfTaxCom.getValue().toString()) / 10000;
+
         vendedor = new Vendedor(
             ftfCpf.getValue().toString(),
             txtNome.getText(),
             Double.parseDouble(txtSalBas.getText())
         );
-        vendedor.setTaxaComissao(Double.parseDouble(txtTaxCom.getText()));
+        vendedor.setTaxaComissao(tc);
         vendedor.setEndereco(txtEndereco.getText());
         vendedor.setCidade(txtCidade.getText());
         vendedor.setUf(cboUf.getSelectedItem().toString());
@@ -345,7 +355,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         vendedor.setTelefone(txtTelefone.getText());
         vendedor.setCep(ftfCep.getValue().toString());
 
-        btnIncluir.setEnabled(false);
+        modoEdicao();
 
         daoVendedor.inserir(vendedor);
     }//GEN-LAST:event_btnIncluirActionPerformed
@@ -353,7 +363,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         vendedor.setNome(txtNome.getText());
         vendedor.setSalarioBase(Double.parseDouble(txtSalBas.getText()));
-        vendedor.setTaxaComissao(Double.parseDouble(txtTaxCom.getText()));
+        vendedor.setTaxaComissao(Double.parseDouble(ftfTaxCom.getText()));
         vendedor.setEndereco(txtEndereco.getText());
         vendedor.setCidade(txtCidade.getText());
         vendedor.setUf(cboUf.getSelectedItem().toString());
@@ -415,7 +425,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         txtTelefone.setEnabled(true);
         ftfCep.setEnabled(true);
         txtSalBas.setEnabled(true);
-        txtTaxCom.setEnabled(true);
+        ftfTaxCom.setEnabled(true);
         btnAlterar.setEnabled(true);
         btnExcluir.setEnabled(true);
         btnConsultar.setEnabled(false);
@@ -432,7 +442,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         txtTelefone.setEnabled(true);
         ftfCep.setEnabled(true);
         txtSalBas.setEnabled(true);
-        txtTaxCom.setEnabled(true);
+        ftfTaxCom.setEnabled(true);
         btnAlterar.setEnabled(false);
         btnExcluir.setEnabled(false);
         btnConsultar.setEnabled(false);
@@ -461,9 +471,9 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         txtTelefone.setEnabled(false);
         txtSalBas.setText("");
         txtSalBas.setEnabled(false);
-        txtTaxCom.setText("");
-        txtTaxCom.setEnabled(false);
-        
+        ftfTaxCom.setText("");
+        ftfTaxCom.setEnabled(false);
+
         btnConsultar.setEnabled(true);
         btnIncluir.setEnabled(false);
         btnAlterar.setEnabled(false);
@@ -479,6 +489,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboUf;
     private javax.swing.JFormattedTextField ftfCep;
     private javax.swing.JFormattedTextField ftfCpf;
+    private javax.swing.JFormattedTextField ftfTaxCom;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -493,7 +504,6 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtSalBas;
-    private javax.swing.JTextField txtTaxCom;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 }
