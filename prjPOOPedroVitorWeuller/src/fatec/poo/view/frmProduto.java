@@ -1,14 +1,17 @@
 package fatec.poo.view;
 
 import fatec.poo.control.Conexao;
+import fatec.poo.control.DBConfig;
 import fatec.poo.control.DaoProduto;
 import fatec.poo.model.Produto;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
 public class frmProduto extends javax.swing.JFrame {
     Conexao conexao;
     DaoProduto daoProduto;
     Produto produto;
+    DecimalFormat df = new DecimalFormat("#0.00");
 
     /**
      * Creates new form frmProduto
@@ -64,7 +67,7 @@ public class frmProduto extends javax.swing.JFrame {
         jLabel3.setText("Qtde. Disponível");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Preço Unitário");
+        jLabel4.setText("Preço Unitário R$");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Estoque Mínimo");
@@ -176,21 +179,20 @@ public class frmProduto extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(txtDescricao)))
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel6))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(38, 38, 38)
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtPreUni, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel3))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(5, 5, 5)
-                                        .addComponent(jLabel6)
-                                        .addGap(18, 18, 18)
                                         .addComponent(cboUniMed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel5)))
+                                        .addComponent(jLabel5))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtPreUni, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel3)))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtEstMin, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -301,10 +303,9 @@ public class frmProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("BD1711006", "occupyMars");
-        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
-        // conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        conexao = new Conexao(DBConfig.usuario, DBConfig.senha);
+        conexao.setDriver(DBConfig.driver);
+        conexao.setConnectionString(DBConfig.modo+DBConfig.host+":"+DBConfig.port+":"+DBConfig.SID);
         daoProduto = new DaoProduto(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
 
@@ -360,7 +361,7 @@ public class frmProduto extends javax.swing.JFrame {
         txtDescricao.requestFocus();
         txtQuaDis.setText(produto.getQtdeEstoque() + "");
         txtQuaDis.setEnabled(true);
-        txtPreUni.setText(produto.getPreco() + "");
+        txtPreUni.setText(df.format(produto.getPreco()));
         txtPreUni.setEnabled(true);
         txtEstMin.setText(produto.getEstoqueMinimo() + "");
         txtEstMin.setEnabled(true);
@@ -372,7 +373,7 @@ public class frmProduto extends javax.swing.JFrame {
         btnAlterar.setEnabled(true);
         btnExcluir.setEnabled(true);
     }
-    
+
     private double stringParaDouble(String str){
         // Se campo nao for preenchido, retorna zero
         if (str.length() == 0) return 0.0;

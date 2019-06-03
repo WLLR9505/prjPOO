@@ -8,6 +8,7 @@ setValueContainsLiteralCharacters do MaskFormatter usado pelo campo.
 package fatec.poo.view;
 
 import fatec.poo.control.Conexao;
+import fatec.poo.control.DBConfig;
 import fatec.poo.control.DaoCliente;
 import fatec.poo.model.Cliente;
 import javax.swing.JOptionPane;
@@ -314,10 +315,9 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("BD1711006", "occupyMars");
-        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
-        // conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        conexao = new Conexao(DBConfig.usuario, DBConfig.senha);
+        conexao.setDriver(DBConfig.driver);
+        conexao.setConnectionString(DBConfig.modo+DBConfig.host+":"+DBConfig.port+":"+DBConfig.SID);
         daoCliente = new DaoCliente(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
 
