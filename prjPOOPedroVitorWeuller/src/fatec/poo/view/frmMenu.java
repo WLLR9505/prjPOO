@@ -1,7 +1,6 @@
 package fatec.poo.view;
 
 public class frmMenu extends javax.swing.JFrame {
-
     /**
      * Creates new form frmMenu
      */

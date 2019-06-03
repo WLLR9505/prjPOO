@@ -20,7 +20,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
 
     public frmCadastroVendedor() {
         initComponents();
-        modoBusca();
+        modoConsulta();
     }
 
     /**
@@ -56,6 +56,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         ftfCep = new javax.swing.JFormattedTextField();
         txtSalBas = new javax.swing.JTextField();
         txtTaxCom = new javax.swing.JTextField();
+        lblModo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Vendedor");
@@ -179,13 +180,18 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
 
         txtTaxCom.setEnabled(false);
 
+        lblModo.setFont(new java.awt.Font("Tahoma", 2, 10)); // NOI18N
+        lblModo.setForeground(new java.awt.Color(102, 102, 102));
+        lblModo.setText("modo consulta");
+        lblModo.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 1, 1, 8));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnConsultar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -195,7 +201,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -208,7 +215,10 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtEndereco, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ftfCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblModo))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -235,8 +245,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                                         .addComponent(txtDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtTaxCom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtTaxCom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterar, btnConsultar, btnExcluir, btnIncluir, btnSair});
@@ -244,10 +253,13 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblModo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -295,8 +307,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         conexao = new Conexao("BD1711006", "occupyMars");
         conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        // conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
-        conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
+        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
+        // conexao.setConnectionString("jdbc:oracle:thin:@apolo:1521:xe");
         daoVendedor = new DaoVendedor(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
 
@@ -336,7 +348,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         vendedor = new Vendedor(
             ftfCpf.getValue().toString(),
             txtNome.getText(),
-            Double.parseDouble(txtSalBas.getText())
+            extrairSalarioBase()
         );
         vendedor.setTaxaComissao(extrairTaxaComissao());
         vendedor.setEndereco(txtEndereco.getText());
@@ -353,7 +365,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         vendedor.setNome(txtNome.getText());
-        vendedor.setSalarioBase(Double.parseDouble(txtSalBas.getText()));
+        vendedor.setSalarioBase(extrairSalarioBase());
         vendedor.setTaxaComissao(extrairTaxaComissao());
         vendedor.setEndereco(txtEndereco.getText());
         vendedor.setCidade(txtCidade.getText());
@@ -363,12 +375,13 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         vendedor.setCep(ftfCep.getValue().toString());
 
         daoVendedor.alterar(vendedor);
+        modoEdicao();
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         daoVendedor.excluir(vendedor);
         vendedor = null;
-        modoBusca();
+        modoConsulta();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
@@ -407,6 +420,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     }
 
     private void modoEdicao() {
+        lblModo.setText("modo edição");
+
         ftfCpf.setEnabled(false);
         txtNome.setEnabled(true);
         txtEndereco.setEnabled(true);
@@ -417,6 +432,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         ftfCep.setEnabled(true);
         txtSalBas.setEnabled(true);
         txtTaxCom.setEnabled(true);
+        btnIncluir.setEnabled(false);
         btnAlterar.setEnabled(true);
         btnExcluir.setEnabled(true);
         btnConsultar.setEnabled(false);
@@ -424,6 +440,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     }
 
     private void modoInsercao() {
+        lblModo.setText("modo inserção");
+
         ftfCpf.setEnabled(false);
         txtNome.setEnabled(true);
         txtEndereco.setEnabled(true);
@@ -440,8 +458,8 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         txtNome.requestFocus();
     }
 
-    private void modoBusca() {
-        System.out.println("Reseting form...");
+    private void modoConsulta() {
+        lblModo.setText("modo consulta");
 
         ftfCpf.setValue("");
         ftfCpf.setEnabled(true);
@@ -473,8 +491,22 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     
     private double extrairTaxaComissao(){
         String tcStr = txtTaxCom.getText();
+
+        // Se campo nao preenchido, taxa zero
+        if (tcStr.length() == 0) return 0.0;
+
         tcStr = tcStr.replace(",", ".");
         return Double.parseDouble(tcStr) / 100;
+    }
+
+    private double extrairSalarioBase(){
+        String sbStr = txtSalBas.getText();
+
+        // Se campo nao preenchido, salario zero
+        if (sbStr.length() == 0) return 0.0;
+
+        sbStr = sbStr.replace(",", ".");
+        return Double.parseDouble(sbStr);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -495,6 +527,7 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblModo;
     private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtDdd;
     private javax.swing.JTextField txtEndereco;
