@@ -302,11 +302,12 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         if (Vendedor.validarCPF(ftfCpf.getValue().toString())) {
             vendedor = daoVendedor.consultar(ftfCpf.getValue().toString());
 
-            modoEdicao();
 
             if (vendedor == null) {
+                modoInsercao();
                 btnIncluir.setEnabled(true);
             } else {
+                modoEdicao();
                 txtNome.setText(vendedor.getNome());
                 txtEndereco.setText(vendedor.getEndereco());
                 txtCidade.setText(vendedor.getCidade());
@@ -319,22 +320,54 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
                 txtTaxCom.setText(vendedor.getTaxaComissao() + "");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "CPF inválido", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "CPF inválido",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
             ftfCpf.setValue("");
             ftfCpf.requestFocus();
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        // TODO add your handling code here:
+        vendedor = new Vendedor(
+            ftfCpf.getValue().toString(),
+            txtNome.getText(),
+            Double.parseDouble(txtSalBas.getText())
+        );
+        vendedor.setTaxaComissao(Double.parseDouble(txtTaxCom.getText()));
+        vendedor.setEndereco(txtEndereco.getText());
+        vendedor.setCidade(txtCidade.getText());
+        vendedor.setUf(cboUf.getSelectedItem().toString());
+        vendedor.setDdd(txtDdd.getText());
+        vendedor.setTelefone(txtTelefone.getText());
+        vendedor.setCep(ftfCep.getValue().toString());
+
+        btnIncluir.setEnabled(false);
+
+        daoVendedor.inserir(vendedor);
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        // TODO add your handling code here:
+        vendedor.setNome(txtNome.getText());
+        vendedor.setSalarioBase(Double.parseDouble(txtSalBas.getText()));
+        vendedor.setTaxaComissao(Double.parseDouble(txtTaxCom.getText()));
+        vendedor.setEndereco(txtEndereco.getText());
+        vendedor.setCidade(txtCidade.getText());
+        vendedor.setUf(cboUf.getSelectedItem().toString());
+        vendedor.setDdd(txtDdd.getText());
+        vendedor.setTelefone(txtTelefone.getText());
+        vendedor.setCep(ftfCep.getValue().toString());
+
+        daoVendedor.alterar(vendedor);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
+        daoVendedor.excluir(vendedor);
+        vendedor = null;
+        modoBusca();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
@@ -388,12 +421,30 @@ public class frmCadastroVendedor extends javax.swing.JFrame {
         btnConsultar.setEnabled(false);
         txtNome.requestFocus();
     }
+    
+    private void modoInsercao() {
+        ftfCpf.setEnabled(false);
+        txtNome.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtCidade.setEnabled(true);
+        cboUf.setEnabled(true);
+        txtDdd.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        ftfCep.setEnabled(true);
+        txtSalBas.setEnabled(true);
+        txtTaxCom.setEnabled(true);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnConsultar.setEnabled(false);
+        txtNome.requestFocus();
+    }
 
     private void modoBusca() {
         System.out.println("Reseting form...");
 
         ftfCpf.setValue("");
         ftfCpf.setEnabled(true);
+        ftfCpf.requestFocus();
         txtNome.setText("");
         txtNome.setEnabled(false);
         txtEndereco.setText("");

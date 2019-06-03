@@ -97,7 +97,7 @@ public class DaoVendedor {
     public void excluir(Vendedor v) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("DELETE FROM Cliente WHERE cpf = ?");
+            ps = conn.prepareStatement("DELETE FROM Vendedor WHERE cpf = ?");
             ps.setString(1, v.getCpf());
             ps.execute();
         } catch (SQLException ex) {

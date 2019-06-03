@@ -339,14 +339,23 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                 lblLimDis.setText(cliente.getLimiteDisp() + "");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "CPF inválido", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "CPF inválido",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
             ftfCpf.setValue("");
             ftfCpf.requestFocus();
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        cliente = new Cliente(ftfCpf.getValue().toString(), txtNome.getText(), Double.parseDouble(txtLimCre.getText()));
+        cliente = new Cliente(
+            ftfCpf.getValue().toString(),
+            txtNome.getText(),
+            Double.parseDouble(txtLimCre.getText())
+        );
         cliente.setEndereco(txtEndereco.getText());
         cliente.setCidade(txtCidade.getText());
         cliente.setUf(cboUf.getSelectedItem().toString());
@@ -368,7 +377,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         cliente.setDdd(txtDdd.getText());
         cliente.setTelefone(txtTelefone.getText());
         cliente.setCep(ftfCep.getValue().toString());
-        
+
         daoCliente.alterar(cliente);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
