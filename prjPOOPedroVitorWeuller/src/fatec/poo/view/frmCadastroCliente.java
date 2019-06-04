@@ -8,6 +8,7 @@ setValueContainsLiteralCharacters do MaskFormatter usado pelo campo.
 package fatec.poo.view;
 
 import fatec.poo.control.Conexao;
+import fatec.poo.control.DBConfig;
 import fatec.poo.control.DaoCliente;
 import fatec.poo.model.Cliente;
 import javax.swing.JOptionPane;
@@ -19,6 +20,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
 
     public frmCadastroCliente() {
         initComponents();
+        modoConsulta();
     }
 
     /**
@@ -54,6 +56,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         lblLimDis = new javax.swing.JLabel();
         ftfCep = new javax.swing.JFormattedTextField();
         txtLimCre = new javax.swing.JTextField();
+        lblModo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Cliente");
@@ -181,6 +184,13 @@ public class frmCadastroCliente extends javax.swing.JFrame {
 
         txtLimCre.setEnabled(false);
 
+        lblModo.setFont(new java.awt.Font("Tahoma", 2, 10)); // NOI18N
+        lblModo.setForeground(new java.awt.Color(102, 102, 102));
+        lblModo.setText("modo consulta");
+        lblModo.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 0, 0, 8));
+        lblModo.setEnabled(false);
+        lblModo.setFocusable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -241,6 +251,9 @@ public class frmCadastroCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblModo))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterar, btnConsultar, btnExcluir, btnIncluir, btnSair});
@@ -248,7 +261,8 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(lblModo)
+                .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(ftfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -291,6 +305,8 @@ public class frmCadastroCliente extends javax.swing.JFrame {
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblLimDis, txtTelefone});
 
+        getAccessibleContext().setAccessibleParent(this);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -299,9 +315,9 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        conexao = new Conexao("BD1711006", "occupyMars");
-        conexao.setDriver("oracle.jdbc.driver.OracleDriver");
-        conexao.setConnectionString("jdbc:oracle:thin:@localhost:1521:orcl");
+        conexao = new Conexao(DBConfig.usuario, DBConfig.senha);
+        conexao.setDriver(DBConfig.driver);
+        conexao.setConnectionString(DBConfig.modo+DBConfig.host+":"+DBConfig.port+":"+DBConfig.SID);
         daoCliente = new DaoCliente(conexao.conectar());
     }//GEN-LAST:event_formWindowOpened
 
@@ -309,34 +325,10 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         if (Cliente.validarCPF(ftfCpf.getValue().toString())) {
             cliente = daoCliente.consultar(ftfCpf.getValue().toString());
 
-            txtNome.setEnabled(true);
-            txtEndereco.setEnabled(true);
-            txtCidade.setEnabled(true);
-            cboUf.setEnabled(true);
-            txtDdd.setEnabled(true);
-            txtTelefone.setEnabled(true);
-            ftfCep.setEnabled(true);
-            txtLimCre.setEnabled(true);
-            btnAlterar.setEnabled(true);
-            btnExcluir.setEnabled(true);
-
-            btnConsultar.setEnabled(false);
-            ftfCpf.setEnabled(false);
-            txtNome.requestFocus();
-
             if (cliente == null) {
-                btnIncluir.setEnabled(true);
+                modoInclusao();
             } else {
-                txtNome.setText(cliente.getNome());
-                txtEndereco.setText(cliente.getEndereco());
-                txtCidade.setText(cliente.getCidade());
-                ftfCep.setValue(cliente.getCep());
-                cboUf.setSelectedItem(cliente.getUf());
-                txtDdd.setText(cliente.getDdd());
-                txtTelefone.setText(cliente.getTelefone());
-                ftfCep.setText(cliente.getCep());
-                txtLimCre.setText(cliente.getLimiteCred() + "");
-                lblLimDis.setText(cliente.getLimiteDisp() + "");
+                modoEdicao();
             }
         } else {
             JOptionPane.showMessageDialog(
@@ -354,7 +346,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         cliente = new Cliente(
             ftfCpf.getValue().toString(),
             txtNome.getText(),
-            Double.parseDouble(txtLimCre.getText())
+            extrairLimiteCredito()
         );
         cliente.setEndereco(txtEndereco.getText());
         cliente.setCidade(txtCidade.getText());
@@ -362,15 +354,20 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         cliente.setDdd(txtDdd.getText());
         cliente.setTelefone(txtTelefone.getText());
         cliente.setCep(ftfCep.getValue().toString());
-        
-        btnIncluir.setEnabled(false);
+        cliente.setLimiteDisp(cliente.getLimiteCred());
 
         daoCliente.inserir(cliente);
+        modoEdicao();
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        double novoLimite = extrairLimiteCredito();
+        if (novoLimite != cliente.getLimiteCred()) {
+            cliente.setLimiteDisp(cliente.getLimiteDisp() + novoLimite - cliente.getLimiteCred());
+        }
+        cliente.setLimiteCred(extrairLimiteCredito());
+
         cliente.setNome(txtNome.getText());
-        cliente.setLimiteCred(Double.parseDouble(txtLimCre.getText()));
         cliente.setEndereco(txtEndereco.getText());
         cliente.setCidade(txtCidade.getText());
         cliente.setUf(cboUf.getSelectedItem().toString());
@@ -379,39 +376,112 @@ public class frmCadastroCliente extends javax.swing.JFrame {
         cliente.setCep(ftfCep.getValue().toString());
 
         daoCliente.alterar(cliente);
+        modoEdicao();
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         daoCliente.excluir(cliente);
+        cliente = null;
+        modoConsulta();
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private double extrairLimiteCredito(){
+        String lcStr = txtLimCre.getText();
+
+        // Se campo nao preenchido, limite zero
+        if (lcStr.length() == 0) return 0.0;
+
+        // Se usuario usar virgula
+        lcStr = lcStr.replace(",", ".");
+
+        return Double.parseDouble(lcStr);
+    }
+
+    private void modoConsulta() {
+        lblModo.setText("modo consulta");
 
         ftfCpf.setValue("");
-        txtNome.setText("");
-        txtEndereco.setText("");
-        txtCidade.setText("");
-        ftfCep.setValue("");
-        cboUf.setSelectedIndex(0);
-        txtDdd.setText("");
-        txtTelefone.setText("");
-        ftfCep.setText("");
-        txtLimCre.setText("");
-        lblLimDis.setText("");
-        
-        txtNome.setEnabled(false);
-        txtEndereco.setEnabled(false);
-        txtCidade.setEnabled(false);
-        cboUf.setEnabled(false);
-        txtDdd.setEnabled(false);
-        txtTelefone.setEnabled(false);
-        ftfCep.setEnabled(false);
-        txtLimCre.setEnabled(false);
-        btnAlterar.setEnabled(false);
-        btnExcluir.setEnabled(false);
-        btnConsultar.setEnabled(true);
         ftfCpf.setEnabled(true);
         ftfCpf.requestFocus();
 
-        cliente = null;
-    }//GEN-LAST:event_btnExcluirActionPerformed
+        txtNome.setText("");
+        txtNome.setEnabled(false);
+        txtEndereco.setText("");
+        txtEndereco.setEnabled(false);
+        txtCidade.setText("");
+        txtCidade.setEnabled(false);
+        cboUf.setSelectedIndex(0);
+        cboUf.setEnabled(false);
+        txtDdd.setText("");
+        txtDdd.setEnabled(false);
+        txtTelefone.setText("");
+        txtTelefone.setEnabled(false);
+        ftfCep.setValue("");
+        ftfCep.setEnabled(false);
+        txtLimCre.setText("");
+        txtLimCre.setEnabled(false);
+        lblLimDis.setText("");
+        lblLimDis.setEnabled(false);
+        btnConsultar.setEnabled(true);
+        btnIncluir.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnSair.setEnabled(true);
+    }
+
+    private void modoInclusao() {
+        lblModo.setText("modo inclusão");
+        
+        txtNome.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtCidade.setEnabled(true);
+        cboUf.setEnabled(true);
+        txtDdd.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        ftfCep.setEnabled(true);
+        txtLimCre.setEnabled(true);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+
+        btnConsultar.setEnabled(false);
+        ftfCpf.setEnabled(false);
+        txtNome.requestFocus();
+
+        btnIncluir.setEnabled(true);
+    }
+    
+    private void modoEdicao() {
+        lblModo.setText("modo edição");
+        
+        txtNome.setText(cliente.getNome());
+        txtEndereco.setText(cliente.getEndereco());
+        txtCidade.setText(cliente.getCidade());
+        ftfCep.setValue(cliente.getCep());
+        cboUf.setSelectedItem(cliente.getUf());
+        txtDdd.setText(cliente.getDdd());
+        txtTelefone.setText(cliente.getTelefone());
+        ftfCep.setText(cliente.getCep());
+        txtLimCre.setText(cliente.getLimiteCred() + "");
+        lblLimDis.setText(cliente.getLimiteDisp() + "");
+
+        txtNome.setEnabled(true);
+        txtNome.requestFocus();
+
+        txtEndereco.setEnabled(true);
+        txtCidade.setEnabled(true);
+        cboUf.setEnabled(true);
+        txtDdd.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        ftfCep.setEnabled(true);
+        txtLimCre.setEnabled(true);
+
+        btnConsultar.setEnabled(false);
+        btnIncluir.setEnabled(false);
+        btnAlterar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+
+        ftfCpf.setEnabled(false);
+    }
 
     /**
      * @param args the command line arguments
@@ -467,6 +537,7 @@ public class frmCadastroCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblLimDis;
+    private javax.swing.JLabel lblModo;
     private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtDdd;
     private javax.swing.JTextField txtEndereco;

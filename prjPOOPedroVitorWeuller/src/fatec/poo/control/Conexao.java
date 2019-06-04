@@ -24,7 +24,7 @@ public class Conexao {
         this.driver = driver;
     }
 
-    public Connection conectar() {   
+    public Connection conectar() {
         if (connection == null) {
             try {
                 Class.forName(driver);
@@ -36,7 +36,7 @@ public class Conexao {
             }
         }
 
-	    return connection;
+	return connection;
     }
 
     public void fecharConexao() {

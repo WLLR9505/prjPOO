@@ -39,7 +39,7 @@ public class Produto {
     public String getCodigo(){
         return codigo;
     }
-    
+
     public String getDescricao() {
         return descricao;
     }
@@ -60,4 +60,3 @@ public class Produto {
         return estoqueMinimo;
     }
 }
-

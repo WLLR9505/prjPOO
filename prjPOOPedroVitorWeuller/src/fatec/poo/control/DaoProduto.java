@@ -13,7 +13,7 @@ public class DaoProduto {
     public DaoProduto(Connection conn) {
          this.conn = conn;
     }
-
+    
     public void inserir(Produto p) {
         PreparedStatement ps = null;
         try {
@@ -35,20 +35,19 @@ public class DaoProduto {
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE Produto SET "+
-                "codigo = ?,"+
                 "descricao = ?,"+
                 "qtdeEstoque = ?,"+
                 "unidadeMedida = ?,"+
                 "preco = ?,"+
-                "estoqueMinimo = ?, WHERE codigo = ?"
+                "estoqueMinimo = ? WHERE codigo = ?"
             );
 
-            ps.setString(1, p.getCodigo());
-            ps.setString(2, p.getDescricao());
-            ps.setDouble(3, p.getQtdeEstoque());
-            ps.setString(4, p.getUnidadeMedida());
-            ps.setDouble(5, p.getPreco());
-            ps.setDouble(6, p.getEstoqueMinimo());
+            ps.setString(1, p.getDescricao());
+            ps.setDouble(2, p.getQtdeEstoque());
+            ps.setString(3, p.getUnidadeMedida());
+            ps.setDouble(4, p.getPreco());
+            ps.setDouble(5, p.getEstoqueMinimo());
+            ps.setString(6, p.getCodigo());
 
             ps.execute();
         } catch (SQLException ex) {
