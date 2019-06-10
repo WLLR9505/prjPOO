@@ -70,6 +70,11 @@ public class frmMenu extends javax.swing.JFrame {
         jMenu2.setText("Pedido");
 
         mnuEmiPed.setText("Emitir Pedido");
+        mnuEmiPed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuEmiPedActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnuEmiPed);
 
         jMenuBar1.add(jMenu2);
@@ -105,6 +110,10 @@ public class frmMenu extends javax.swing.JFrame {
     private void mnuProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProdutosActionPerformed
         new frmProduto().setVisible(true);
     }//GEN-LAST:event_mnuProdutosActionPerformed
+
+    private void mnuEmiPedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEmiPedActionPerformed
+        new frmEmitirPedido().setVisible(true);
+    }//GEN-LAST:event_mnuEmiPedActionPerformed
 
     /**
      * @param args the command line arguments
