@@ -1,19 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fatec.poo.view;
 
-/**
- *
- * @author barba
- */
-public class frmEmitirPedido extends javax.swing.JFrame {
+import fatec.poo.control.Conexao;
+import fatec.poo.control.DBConfig;
+import fatec.poo.control.DaoPedido;
+import fatec.poo.control.DaoVendedor;
+import fatec.poo.model.Pedido;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form frmEmitirPedido
-     */
+public class frmEmitirPedido extends javax.swing.JFrame {
+    private Conexao conexao;
+    DaoPedido daoPedido;
+    Pedido pedido;
+
     public frmEmitirPedido() {
         initComponents();
     }
@@ -40,41 +38,57 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         ftfCPFCli = new javax.swing.JFormattedTextField();
-        btnConCPFCli = new javax.swing.JButton();
+        btnConCli = new javax.swing.JButton();
         lblNomCli = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         ftfCPFVen = new javax.swing.JFormattedTextField();
-        btnConCPFVen = new javax.swing.JButton();
+        btnConVen = new javax.swing.JButton();
         lblNomVen = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         txtCodPro = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btnConPro = new javax.swing.JButton();
-        lblNomVen1 = new javax.swing.JLabel();
+        lblNomPro = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         ftfQtdVen = new javax.swing.JFormattedTextField();
         btnAdiIte = new javax.swing.JButton();
         btnRemIte = new javax.swing.JButton();
-        tblItens = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jspItens = new javax.swing.JScrollPane();
+        tblItens = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         lblQtde = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnSair = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        btnIncluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Emitir Pedido");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Pedido"));
 
         jLabel1.setText("Número do Pedido");
 
         btnConPed.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
+        btnConPed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConPedActionPerformed(evt);
+            }
+        });
+
+        txtNumPed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConPedActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Data do Pedido");
 
@@ -84,6 +98,11 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         ftfDatPed.setEnabled(false);
+        ftfDatPed.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                validarData(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Forma de Pagamento"));
 
@@ -163,8 +182,8 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         }
         ftfCPFCli.setEnabled(false);
 
-        btnConCPFCli.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
-        btnConCPFCli.setEnabled(false);
+        btnConCli.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
+        btnConCli.setEnabled(false);
 
         lblNomCli.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
 
@@ -178,7 +197,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ftfCPFCli, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnConCPFCli)
+                .addComponent(btnConCli)
                 .addGap(18, 18, 18)
                 .addComponent(lblNomCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -192,7 +211,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jLabel3)
                             .addComponent(ftfCPFCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnConCPFCli, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnConCli, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(lblNomCli, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -209,8 +228,8 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         }
         ftfCPFVen.setEnabled(false);
 
-        btnConCPFVen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
-        btnConCPFVen.setEnabled(false);
+        btnConVen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
+        btnConVen.setEnabled(false);
 
         lblNomVen.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
 
@@ -224,7 +243,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ftfCPFVen, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnConCPFVen)
+                .addComponent(btnConVen)
                 .addGap(18, 18, 18)
                 .addComponent(lblNomVen, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
                 .addContainerGap())
@@ -238,7 +257,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jLabel4)
                             .addComponent(ftfCPFVen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnConCPFVen, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnConVen, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(lblNomVen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -253,7 +272,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         btnConPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
         btnConPro.setEnabled(false);
 
-        lblNomVen1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
+        lblNomPro.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
 
         jLabel6.setText("Qtde. Vendida");
 
@@ -267,7 +286,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         btnRemIte.setText("Remover Item");
         btnRemIte.setEnabled(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblItens.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -290,7 +309,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblItens.setViewportView(jTable1);
+        jspItens.setViewportView(tblItens);
 
         jLabel7.setText("Valor Total do Pedido");
 
@@ -307,7 +326,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tblItens)
+                    .addComponent(jspItens)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -315,7 +334,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnConPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblNomVen1, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                        .addComponent(lblNomPro, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -324,17 +343,17 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(btnAdiIte, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnRemIte, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
                                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
-                                .addComponent(lblQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(lblQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(btnAdiIte, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRemIte, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
 
@@ -347,7 +366,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(ftfQtdVen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(lblNomVen1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNomPro, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConPro, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCodPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
@@ -356,7 +375,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                     .addComponent(btnAdiIte, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRemIte))
                 .addGap(18, 18, 18)
-                .addComponent(tblItens, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jspItens, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -370,22 +389,27 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
         jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAdiIte, btnRemIte});
 
-        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ftfQtdVen, lblNomVen1});
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {ftfQtdVen, lblNomPro});
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/exit.png"))); // NOI18N
-        jButton1.setText("Sair");
+        btnSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/exit.png"))); // NOI18N
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
-        jButton2.setText("Excluir");
-        jButton2.setEnabled(false);
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
+        btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
-        jButton3.setText("Alterar");
-        jButton3.setEnabled(false);
+        btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
+        btnAlterar.setText("Alterar");
+        btnAlterar.setEnabled(false);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/save.png"))); // NOI18N
-        jButton4.setText("Incluir");
-        jButton4.setEnabled(false);
+        btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/save.png"))); // NOI18N
+        btnIncluir.setText("Incluir");
+        btnIncluir.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -400,17 +424,17 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton4)
+                        .addComponent(btnIncluir)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)
+                        .addComponent(btnAlterar)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(btnExcluir)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)))
+                        .addComponent(btnSair)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3, jButton4});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterar, btnExcluir, btnIncluir, btnSair});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -425,15 +449,74 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnSair)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnAlterar)
+                    .addComponent(btnIncluir))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    private void btnConPedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConPedActionPerformed
+        System.out.println(txtNumPed.getText());
+        String nPedido = txtNumPed.getText();
+        if (nPedido.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Preencha o Número do Pedido",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
+        } else {
+            pedido = daoPedido.consultar(nPedido);
+            
+            if (pedido == null) {
+                System.out.println("PEDIDO NÃO ENCONTRADO");
+                btnConPed.setEnabled(false);
+                ftfDatPed.setEnabled(true);
+                ftfDatPed.requestFocus();
+                ftfCPFCli.setEnabled(true);
+                btnConCli.setEnabled(true);
+                rbtAVista.setEnabled(true);
+                rbtAPrazo.setEnabled(true);
+            } else {
+                System.out.println("PEDIDO ENCONTRADO");
+            }
+        }
+    }//GEN-LAST:event_btnConPedActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        conexao = new Conexao(DBConfig.usuario, DBConfig.senha);
+        conexao.setDriver(DBConfig.driver);
+        conexao.setConnectionString(DBConfig.modo+DBConfig.host+":"+DBConfig.port+":"+DBConfig.SID);
+        daoPedido = new DaoPedido(conexao.conectar());
+    }//GEN-LAST:event_formWindowOpened
+
+    private void validarData(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_validarData
+        System.out.println("validar data");
+    }//GEN-LAST:event_validarData
+
+    public static boolean isInteger(String s) {
+        return isInteger(s, 10);
+    }
+
+    public static boolean isInteger(String s, int radix) {
+        if(s.isEmpty()) return false;
+        for(int i = 0; i < s.length(); i++) {
+            if(i == 0 && s.charAt(i) == '-') {
+                if(s.length() == 1) return false;
+                else continue;
+            }
+            if(Character.digit(s.charAt(i),radix) < 0) return false;
+        }
+        return true;
+    }
 
     /**
      * @param args the command line arguments
@@ -472,20 +555,20 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdiIte;
-    private javax.swing.JButton btnConCPFCli;
-    private javax.swing.JButton btnConCPFVen;
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnConCli;
     private javax.swing.JButton btnConPed;
     private javax.swing.JButton btnConPro;
+    private javax.swing.JButton btnConVen;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnIncluir;
     private javax.swing.JButton btnRemIte;
+    private javax.swing.JButton btnSair;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JFormattedTextField ftfCPFCli;
     private javax.swing.JFormattedTextField ftfCPFVen;
     private javax.swing.JFormattedTextField ftfDatPed;
     private javax.swing.JFormattedTextField ftfQtdVen;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -499,15 +582,15 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jspItens;
     private javax.swing.JLabel lblNomCli;
+    private javax.swing.JLabel lblNomPro;
     private javax.swing.JLabel lblNomVen;
-    private javax.swing.JLabel lblNomVen1;
     private javax.swing.JLabel lblQtde;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JRadioButton rbtAPrazo;
     private javax.swing.JRadioButton rbtAVista;
-    private javax.swing.JScrollPane tblItens;
+    private javax.swing.JTable tblItens;
     private javax.swing.JTextField txtCodPro;
     private javax.swing.JTextField txtNumPed;
     // End of variables declaration//GEN-END:variables
