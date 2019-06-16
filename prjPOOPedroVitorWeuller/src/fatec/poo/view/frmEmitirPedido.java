@@ -620,6 +620,25 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
     private void btnConVenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConVenActionPerformed
         System.out.println("PROCURAR VENDEDOR");
+        
+        vendedor = daoVendedor.consultar(ftfCPFVen.getValue().toString());
+
+        if (vendedor == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Vendedor não encontrado",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
+        } else {
+            vendedor.addPedido(pedido);
+            lblNomVen.setText(vendedor.getNome());
+            ftfCPFVen.setEnabled(false);
+            btnConVen.setEnabled(false);
+            txtCodPro.setEnabled(true);
+            btnConPro.setEnabled(true);
+            txtCodPro.requestFocus();
+        }
     }//GEN-LAST:event_btnConVenActionPerformed
 
     private void btnConProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProActionPerformed
