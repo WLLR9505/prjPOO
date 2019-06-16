@@ -3,11 +3,13 @@ package fatec.poo.view;
 import fatec.poo.control.Conexao;
 import fatec.poo.control.DBConfig;
 import fatec.poo.control.DaoPedido;
+import fatec.poo.control.DaoProduto;
 import fatec.poo.control.DaoCliente;
 import fatec.poo.control.DaoVendedor;
 import fatec.poo.model.Pedido;
 import fatec.poo.model.Cliente;
 import fatec.poo.model.Vendedor;
+import fatec.poo.model.Produto;
 import javax.swing.JOptionPane;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,9 +18,11 @@ import java.text.ParseException;
 public class frmEmitirPedido extends javax.swing.JFrame {
     private Conexao conexao;
     private DaoPedido daoPedido;
+    private DaoProduto daoProduto;
     private DaoCliente daoCliente;
     private DaoVendedor daoVendedor;
     private Pedido pedido;
+    private Produto produto;
     private Cliente cliente;
     private Vendedor vendedor;
     private DateFormat df;
@@ -567,6 +571,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         daoPedido = new DaoPedido(conexao.conectar());
         daoCliente = new DaoCliente(conexao.conectar());
         daoVendedor = new DaoVendedor(conexao.conectar());
+        daoProduto = new DaoProduto(conexao.conectar());
         df = new SimpleDateFormat("dd/MM/yyyy");
         df.setLenient(false);
     }//GEN-LAST:event_formWindowOpened
@@ -642,11 +647,26 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConVenActionPerformed
 
     private void btnConProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProActionPerformed
-        System.out.println("PROCURAR PRODUTO");
+        System.out.println("PROCURAR PRODUTO");        
+        produto = daoProduto.consultar(txtCodPro.getText());
+
+        if (produto == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Produto não encontrado",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
+        } else {
+            lblNomPro.setText(produto.getDescricao());
+            btnAdiIte.setEnabled(true);
+            btnAdiIte.requestFocus();
+        }
     }//GEN-LAST:event_btnConProActionPerformed
 
     private void btnAdiIteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdiIteActionPerformed
         System.out.println("ADICIONAR ITEM");
+        btnRemIte.setEnabled(true);
     }//GEN-LAST:event_btnAdiIteActionPerformed
 
     private void btnRemIteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemIteActionPerformed

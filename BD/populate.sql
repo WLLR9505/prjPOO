@@ -5,3 +5,7 @@ INSERT INTO Cliente
 INSERT INTO Vendedor
 (cpf, nome, endereco, cidade, uf, cep, ddd, telefone, taxaComissao, salarioBase) VALUES
 ('05226752474', 'Cecília Costa Cabral SOUSA', 'Rua Icaraí, 308', 'Sorocaba', 'SP', '18044270', '11', '963189090', 0.1, 2499.9);
+
+INSERT INTO Produto
+(codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES
+('0', 'Acer Nitro 5', 10, 'UN', 1199.9, 2);
