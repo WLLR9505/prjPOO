@@ -3,14 +3,25 @@ package fatec.poo.view;
 import fatec.poo.control.Conexao;
 import fatec.poo.control.DBConfig;
 import fatec.poo.control.DaoPedido;
+import fatec.poo.control.DaoCliente;
 import fatec.poo.control.DaoVendedor;
 import fatec.poo.model.Pedido;
+import fatec.poo.model.Cliente;
+import fatec.poo.model.Vendedor;
 import javax.swing.JOptionPane;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class frmEmitirPedido extends javax.swing.JFrame {
     private Conexao conexao;
-    DaoPedido daoPedido;
-    Pedido pedido;
+    private DaoPedido daoPedido;
+    private DaoCliente daoCliente;
+    private DaoVendedor daoVendedor;
+    private Pedido pedido;
+    private Cliente cliente;
+    private Vendedor vendedor;
+    private DateFormat df;
 
     public frmEmitirPedido() {
         initComponents();
@@ -176,14 +187,26 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         jLabel3.setText("CPF Cliente");
 
         try {
-            ftfCPFCli.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("###.###.###-##");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfCPFCli.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
         ftfCPFCli.setEnabled(false);
+        ftfCPFCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConCliActionPerformed(evt);
+            }
+        });
 
         btnConCli.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
         btnConCli.setEnabled(false);
+        btnConCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConCliActionPerformed(evt);
+            }
+        });
 
         lblNomCli.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
 
@@ -222,14 +245,26 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         jLabel4.setText("CPF Vendedor");
 
         try {
-            ftfCPFVen.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter("###.###.###-##");
+            mf.setValueContainsLiteralCharacters(false);
+            ftfCPFVen.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mf));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
         ftfCPFVen.setEnabled(false);
+        ftfCPFVen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConVenActionPerformed(evt);
+            }
+        });
 
         btnConVen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
         btnConVen.setEnabled(false);
+        btnConVen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConVenActionPerformed(evt);
+            }
+        });
 
         lblNomVen.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
 
@@ -266,11 +301,21 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Itens do Pedido"));
 
         txtCodPro.setEnabled(false);
+        txtCodPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConProActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Código Produto");
 
         btnConPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/pesq.png"))); // NOI18N
         btnConPro.setEnabled(false);
+        btnConPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConProActionPerformed(evt);
+            }
+        });
 
         lblNomPro.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
 
@@ -281,10 +326,20 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         btnAdiIte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/add.png"))); // NOI18N
         btnAdiIte.setText("Adicionar Item");
         btnAdiIte.setEnabled(false);
+        btnAdiIte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdiIteActionPerformed(evt);
+            }
+        });
 
         btnRemIte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/rem.png"))); // NOI18N
         btnRemIte.setText("Remover Item");
         btnRemIte.setEnabled(false);
+        btnRemIte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemIteActionPerformed(evt);
+            }
+        });
 
         tblItens.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -402,14 +457,29 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Eraser.png"))); // NOI18N
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/Alterar.png"))); // NOI18N
         btnAlterar.setText("Alterar");
         btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fatec/poo/view/icon/save.png"))); // NOI18N
         btnIncluir.setText("Incluir");
         btnIncluir.setEnabled(false);
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -481,8 +551,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 btnConPed.setEnabled(false);
                 ftfDatPed.setEnabled(true);
                 ftfDatPed.requestFocus();
-                ftfCPFCli.setEnabled(true);
-                btnConCli.setEnabled(true);
                 rbtAVista.setEnabled(true);
                 rbtAPrazo.setEnabled(true);
             } else {
@@ -496,11 +564,72 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         conexao.setDriver(DBConfig.driver);
         conexao.setConnectionString(DBConfig.modo+DBConfig.host+":"+DBConfig.port+":"+DBConfig.SID);
         daoPedido = new DaoPedido(conexao.conectar());
+        daoCliente = new DaoCliente(conexao.conectar());
+        daoVendedor = new DaoVendedor(conexao.conectar());
+        df = new SimpleDateFormat("dd/MM/yyyy");
+        df.setLenient(false);
     }//GEN-LAST:event_formWindowOpened
 
     private void validarData(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_validarData
-        System.out.println("validar data");
+        String d = ftfDatPed.getText();
+
+        try {
+            ftfDatPed.setEnabled(false);
+            df.parse(d);
+            ftfCPFCli.setEnabled(true);
+            btnConCli.setEnabled(true);
+            ftfCPFCli.requestFocus();
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Data inválida",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
+            ftfDatPed.setText("");
+            ftfDatPed.requestFocus();
+        }
     }//GEN-LAST:event_validarData
+
+    private void btnConCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConCliActionPerformed
+        System.out.println("PROCURAR CLIENTE");
+        
+        cliente = daoCliente.consultar(ftfCPFCli.getValue().toString());
+
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado");
+        } else {
+            System.out.println("Cliente encontrado");
+        }
+    }//GEN-LAST:event_btnConCliActionPerformed
+
+    private void btnConVenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConVenActionPerformed
+        System.out.println("PROCURAR VENDEDOR");
+    }//GEN-LAST:event_btnConVenActionPerformed
+
+    private void btnConProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProActionPerformed
+        System.out.println("PROCURAR PRODUTO");
+    }//GEN-LAST:event_btnConProActionPerformed
+
+    private void btnAdiIteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdiIteActionPerformed
+        System.out.println("ADICIONAR ITEM");
+    }//GEN-LAST:event_btnAdiIteActionPerformed
+
+    private void btnRemIteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemIteActionPerformed
+        System.out.println("REMOVER ITEM");
+    }//GEN-LAST:event_btnRemIteActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        System.out.println("INCLUIR PEDIDO");
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        System.out.println("ALTERAR PEDIDO");
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        System.out.println("ALTERAR PEDIDO");
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     public static boolean isInteger(String s) {
         return isInteger(s, 10);

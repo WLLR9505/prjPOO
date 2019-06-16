@@ -9,7 +9,7 @@ public class Conexao {
     private String driver;
     private String usuario;
     private String senha;
-    private Connection connection=null;
+    private Connection connection = null;
 
     public Conexao(String usuario, String senha) {   
         this.usuario = usuario;
