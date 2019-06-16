@@ -548,6 +548,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             
             if (pedido == null) {
                 System.out.println("PEDIDO NÃO ENCONTRADO");
+                txtNumPed.setEnabled(false);
                 btnConPed.setEnabled(false);
                 ftfDatPed.setEnabled(true);
                 ftfDatPed.requestFocus();
@@ -574,8 +575,10 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         String d = ftfDatPed.getText();
 
         try {
+            df.parse(d);    
+            pedido = new Pedido(txtNumPed.getText(), d);
+
             ftfDatPed.setEnabled(false);
-            df.parse(d);
             ftfCPFCli.setEnabled(true);
             btnConCli.setEnabled(true);
             ftfCPFCli.requestFocus();
@@ -597,9 +600,21 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         cliente = daoCliente.consultar(ftfCPFCli.getValue().toString());
 
         if (cliente == null) {
-            System.out.println("Cliente não encontrado");
+            JOptionPane.showMessageDialog(
+                this,
+                "Cliente não encontrado",
+                "ATENÇÃO",
+                JOptionPane.WARNING_MESSAGE
+            );
         } else {
-            System.out.println("Cliente encontrado");
+            cliente.addPedido(pedido);
+            lblNomCli.setText(cliente.getNome());
+            ftfDatPed.setEnabled(false);
+            ftfCPFCli.setEnabled(false);
+            btnConCli.setEnabled(false);
+            ftfCPFVen.setEnabled(true);
+            btnConVen.setEnabled(true);
+            ftfCPFVen.requestFocus();
         }
     }//GEN-LAST:event_btnConCliActionPerformed
 
