@@ -9,3 +9,6 @@ INSERT INTO Vendedor
 INSERT INTO Produto
 (codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES
 ('0', 'Acer Nitro 5', 10, 'UN', 1199.9, 2);
+INSERT INTO Produto
+(codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES
+('1', 'Mouse Logitech M170', 10, 'UN', 71.45, 1);

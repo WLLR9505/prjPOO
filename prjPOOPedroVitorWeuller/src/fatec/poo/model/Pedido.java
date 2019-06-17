@@ -25,6 +25,15 @@ public class Pedido {
             cliente.setLimiteDisp(cliente.getLimiteDisp() - item.getProduto().getPreco() * item.getQtdeVendida());
         }
     }
+    
+    public void removeItem(int indice) {
+        ItemPedido item = itens.get(indice);
+        itens.remove(item);
+
+        if (formaPagto) {
+            cliente.setLimiteDisp(cliente.getLimiteDisp() + item.getProduto().getPreco() * item.getQtdeVendida());
+        }
+    }
 
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
@@ -64,5 +73,27 @@ public class Pedido {
 
     public boolean getSituacao() {
         return situacao;
+    }
+    
+    public double calcTotal(){
+        double total = 0;
+        int i;
+
+        for (i=0; i<itens.size(); i++) {
+            total += itens.get(i).getQtdeVendida() * itens.get(i).getProduto().getPreco();
+        }
+
+        return total;
+    }
+    
+    public int calcQtdeItens() {
+        int total = 0;
+        int i;
+
+        for (i=0; i<itens.size(); i++) {
+            total += itens.get(i).getQtdeVendida();
+        }
+
+        return total;
     }
 }

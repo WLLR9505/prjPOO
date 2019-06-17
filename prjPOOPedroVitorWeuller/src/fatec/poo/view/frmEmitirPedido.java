@@ -13,8 +13,10 @@ import fatec.poo.model.Produto;
 import fatec.poo.model.ItemPedido;
 import javax.swing.JOptionPane;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import javax.swing.table.DefaultTableModel;
 
 public class frmEmitirPedido extends javax.swing.JFrame {
     private Conexao conexao;
@@ -28,9 +30,13 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     private Vendedor vendedor;
     private ItemPedido itemPedido;
     private DateFormat df;
+    private DecimalFormat formatQtde = new DecimalFormat("#0.00");
+    private DecimalFormat formatDinheiro = new DecimalFormat("R$ #0.00");
+    private DefaultTableModel modTblItens;
 
     public frmEmitirPedido() {
         initComponents();
+        modTblItens = (DefaultTableModel)tblItens.getModel();
     }
 
     /**
@@ -576,7 +582,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         try {
             df.parse(d);    
             pedido = new Pedido(txtNumPed.getText(), d);
-            pedido.setFormaPagto(rbtAPrazo.isSelected());
 
             ftfDatPed.setEnabled(false);
             ftfCPFCli.setEnabled(true);
@@ -675,15 +680,33 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
             itemPedido = new ItemPedido(tblItens.getRowCount(), qtd, produto);
             itemPedido.setPedido(pedido);
-            
+
             // forma de pagamento
+            pedido.setFormaPagto(rbtAPrazo.isSelected());
             if (pedido.getFormaPagto()) {
-                System.out.println("A PRAZO");
-            } else {
-                System.out.println("A VISTA");
+                if (pedido.calcTotal() + qtd*produto.getPreco() > cliente.getLimiteDisp()) {
+                    throw new IllegalArgumentException("Limite de crédito insuficiente");
+                } else {
+                    cliente.setLimiteDisp(cliente.getLimiteDisp() - pedido.calcTotal() + qtd*produto.getPreco());
+                }
             }
-            
+
+            pedido.addItem(itemPedido);
+
+            String linha[] = {
+                produto.getCodigo(),
+                produto.getDescricao(),
+                formatDinheiro.format(produto.getPreco()),
+                formatQtde.format(qtd),
+                formatDinheiro.format(qtd * produto.getPreco())
+            };
+
+            modTblItens.addRow(linha);
+            lblQtde.setText(formatQtde.format(pedido.calcQtdeItens()));
+            lblTotal.setText(formatDinheiro.format(pedido.calcTotal()));
+
             btnRemIte.setEnabled(true);
+            btnIncluir.setEnabled(true);
         } catch (Exception e) {
             if (e instanceof NumberFormatException) {
                 JOptionPane.showMessageDialog(
@@ -706,7 +729,14 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdiIteActionPerformed
 
     private void btnRemIteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemIteActionPerformed
-        System.out.println("REMOVER ITEM");
+        if (tblItens.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            pedido.removeItem(tblItens.getSelectedRow());
+            modTblItens.removeRow(tblItens.getSelectedRow());
+            lblQtde.setText(formatQtde.format(pedido.calcQtdeItens()));
+            lblTotal.setText(formatDinheiro.format(pedido.calcTotal()));
+        }
     }//GEN-LAST:event_btnRemIteActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
