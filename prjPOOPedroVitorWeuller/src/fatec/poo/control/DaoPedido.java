@@ -17,21 +17,23 @@ public class DaoPedido {
 
     public void inserir(Pedido p) {
         PreparedStatement ps = null;
-        /*
+
         try {
-            ps = conn.prepareStatement("INSERT INTO Produto (codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES(?,?,?,?,?,?)");
-            ps.setString(1, p.getCodigo());
-            ps.setString(2, p.getDescricao());
-            ps.setDouble(3, p.getQtdeEstoque());
-            ps.setString(4, p.getUnidadeMedida());
-            ps.setDouble(5, p.getPreco());
-            ps.setDouble(6, p.getEstoqueMinimo());
+            ps = conn.prepareStatement("INSERT INTO Pedido (numero, dataEmissao, dataPagto, formaPagto, cliente, vendedor) VALUES(?,?,?,?,?,?)");
+            ps.setString(1, p.getNumero());
+            ps.setString(2, p.getDataEmissao());
+            ps.setString(3, p.getDataPagto());
+            
+            if (p.getFormaPagto()) ps.setString(4, "P");
+            else ps.setString(4, "V");
+            
+            ps.setString(5, p.getCliente().getCpf());
+            ps.setString(6, p.getVendedor().getCpf());
 
             ps.execute();
         } catch (SQLException ex) {
              System.out.println(ex.toString());
         }
-        */
     }
 
     public void alterar(Produto p) {

@@ -3,6 +3,7 @@ package fatec.poo.view;
 import fatec.poo.control.Conexao;
 import fatec.poo.control.DBConfig;
 import fatec.poo.control.DaoPedido;
+import fatec.poo.control.DaoItemPedido;
 import fatec.poo.control.DaoProduto;
 import fatec.poo.control.DaoCliente;
 import fatec.poo.control.DaoVendedor;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class frmEmitirPedido extends javax.swing.JFrame {
     private Conexao conexao;
     private DaoPedido daoPedido;
+    private DaoItemPedido daoItemPedido;
     private DaoProduto daoProduto;
     private DaoCliente daoCliente;
     private DaoVendedor daoVendedor;
@@ -569,6 +571,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         conexao.setDriver(DBConfig.driver);
         conexao.setConnectionString(DBConfig.modo+DBConfig.host+":"+DBConfig.port+":"+DBConfig.SID);
         daoPedido = new DaoPedido(conexao.conectar());
+        daoItemPedido = new DaoItemPedido(conexao.conectar());
         daoCliente = new DaoCliente(conexao.conectar());
         daoVendedor = new DaoVendedor(conexao.conectar());
         daoProduto = new DaoProduto(conexao.conectar());
@@ -741,6 +744,13 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
         System.out.println("INCLUIR PEDIDO");
+        daoPedido.inserir(pedido);
+
+        int i;
+
+        for (i=0; i<pedido.getItens().size(); i++) {
+            daoItemPedido.inserir(pedido.getItens().get(i));
+        }
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed

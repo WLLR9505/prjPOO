@@ -34,13 +34,25 @@ public class Pedido {
             cliente.setLimiteDisp(cliente.getLimiteDisp() + item.getProduto().getPreco() * item.getQtdeVendida());
         }
     }
+    
+    public ArrayList<ItemPedido> getItens() {
+        return itens;
+    }
 
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
 
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+    
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public void setDataPagto(String dataPagto) {

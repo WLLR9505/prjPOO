@@ -33,8 +33,7 @@ create table ItemPedido (
     pedido varchar2(8),  /* FK Pedido.numero  | composite */
     produto varchar2(8), /* FK Produto.codigo |     PK    */
     sequencia number(8, 0), /* 99999999 */
-    qtdeVendida number(16, 6), /* 9999999999.999999 */
-    quantidade number(16, 6) /* 9999999999.999999 */
+    qtdeVendida number(16, 6) /* 9999999999.999999 */
 );
 
 create table Vendedor (

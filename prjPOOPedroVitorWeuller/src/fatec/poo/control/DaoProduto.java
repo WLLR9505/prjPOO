@@ -11,9 +11,9 @@ public class DaoProduto {
     private Connection conn;
 
     public DaoProduto(Connection conn) {
-         this.conn = conn;
+        this.conn = conn;
     }
-    
+
     public void inserir(Produto p) {
         PreparedStatement ps = null;
         try {
