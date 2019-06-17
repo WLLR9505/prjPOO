@@ -1,4 +1,3 @@
-
 package fatec.poo.model;
 import java.util.ArrayList;
 
@@ -6,7 +5,7 @@ public class Pedido {
     private String numero;
     private String dataEmissao;
     private String dataPagto;
-    private boolean formaPagto;
+    private boolean formaPagto; /* TRUE: a prazo */
     private boolean situacao;
     private Cliente cliente;
     private Vendedor vendedor;

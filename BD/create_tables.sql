@@ -15,7 +15,7 @@ create table Pedido (
     numero varchar2(8), /* PK */
     dataEmissao varchar2(10),
     dataPagto varchar2(10),
-    formaPagto varchar2(1),
+    formaPagto varchar2(1), /* P (a prazo) ou V (a vista) */
     cliente varchar2(11), /* FK Cliente.cpf */
     vendedor varchar2(11) /* FK Vendedor.cpf */
 );
