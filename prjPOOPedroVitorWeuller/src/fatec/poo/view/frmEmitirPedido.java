@@ -699,6 +699,9 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             btnAdiIte.setEnabled(true);
             ftfQtdVen.setEnabled(true);
             ftfQtdVen.requestFocus();
+            txtCodPro.setEnabled(true);
+            btnConPro.setEnabled(true);
+            ftfQtdVen.setEnabled(true);
         }
     }//GEN-LAST:event_btnConProActionPerformed
 
@@ -793,10 +796,41 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         System.out.println("ALTERAR PEDIDO");
+        daoPedido.excluir(pedido);
+        btnIncluirActionPerformed(null);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         System.out.println("EXCLUIR PEDIDO");
+        
+        daoPedido.excluir(pedido);
+        txtNumPed.setEnabled(true);
+        txtNumPed.setText("");
+        btnConPed.setEnabled(true);
+        ftfDatPed.setEnabled(false);
+        ftfDatPed.setText("");
+        rbtAVista.setSelected(true);
+        rbtAVista.setEnabled(false);
+        ftfCPFCli.setText("");
+        ftfCPFCli.setEnabled(false);
+        lblNomCli.setText("");
+        ftfCPFVen.setText("");
+        ftfCPFVen.setEnabled(false);
+        lblNomVen.setText("");
+        txtCodPro.setEnabled(false);
+        txtCodPro.setText("");
+        btnConPro.setEnabled(false);
+        lblNomPro.setText("");
+        ftfQtdVen.setEnabled(false);
+        ftfQtdVen.setText("");
+        while (modTblItens.getRowCount() > 0) modTblItens.removeRow(0);
+        lblTotal.setText("");
+        lblQtde.setText("");
+        btnAdiIte.setEnabled(false);
+        btnRemIte.setEnabled(false);
+        btnIncluir.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     public static boolean isInteger(String s) {

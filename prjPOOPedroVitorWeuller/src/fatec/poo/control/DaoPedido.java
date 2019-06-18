@@ -12,8 +12,10 @@ import fatec.poo.model.Cliente;
 public class DaoPedido {
     private Connection conn;
     private DaoCliente daoCliente;
+    private DaoProduto daoProduto;
     private DaoVendedor daoVendedor;
     private DaoItemPedido daoItemPedido;
+    private Produto produto;
 
     public DaoPedido(Connection conn) {
          this.conn = conn;
@@ -100,15 +102,30 @@ public class DaoPedido {
 
     public void excluir(Pedido p) {
         PreparedStatement ps = null;
-        /* TODO: antes de excluir o pedido, é preciso excluir todos os itens
-           referentes a ele na tabela itemPedido
+
         try {
-            ps = conn.prepareStatement("DELETE FROM Produto WHERE codigo = ?");
-            ps.setString(1, p.getCodigo());
+            if (p.getFormaPagto()) {
+                p.getCliente().setLimiteDisp(p.getCliente().getLimiteDisp() + p.calcTotal());
+                daoCliente = new DaoCliente(conn);
+                daoCliente.alterar(p.getCliente());
+            }
+
+            daoProduto = new DaoProduto(conn);
+            for (int i=0; i<p.getItens().size(); i++) {
+                produto = p.getItens().get(i).getProduto();
+                produto.setQtdeEstoque(produto.getQtdeEstoque() + p.getItens().get(i).getQtdeVendida());
+                daoProduto.alterar(produto);
+            }
+            
+            ps = conn.prepareStatement("DELETE FROM ItemPedido WHERE pedido = ?");
+            ps.setString(1, p.getNumero());
+            ps.execute();
+            
+            ps = conn.prepareStatement("DELETE FROM Pedido WHERE numero = ?");
+            ps.setString(1, p.getNumero());
             ps.execute();
         } catch (SQLException ex) {
              System.out.println(ex.toString());
         }
-        */
     }
 }
