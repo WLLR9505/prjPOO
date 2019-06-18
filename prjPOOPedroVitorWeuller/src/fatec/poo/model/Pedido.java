@@ -38,6 +38,10 @@ public class Pedido {
     public ArrayList<ItemPedido> getItens() {
         return itens;
     }
+    
+    public void setItens(ArrayList<ItemPedido> itens) {
+        this.itens = itens;
+    }
 
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;

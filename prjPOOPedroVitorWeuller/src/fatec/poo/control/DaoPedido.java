@@ -7,9 +7,13 @@ import java.sql.ResultSet;
 
 import fatec.poo.model.Produto;
 import fatec.poo.model.Pedido;
+import fatec.poo.model.Cliente;
 
 public class DaoPedido {
     private Connection conn;
+    private DaoCliente daoCliente;
+    private DaoVendedor daoVendedor;
+    private DaoItemPedido daoItemPedido;
 
     public DaoPedido(Connection conn) {
          this.conn = conn;
@@ -73,13 +77,19 @@ public class DaoPedido {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next() == true) {
-                /*
-                p = new Produto (codigo, rs.getString("descricao"));
-                p.setQtdeEstoque(rs.getDouble("qtdeEstoque"));
-                p.setUnidadeMedida(rs.getString("unidadeMedida"));
-                p.setPreco(rs.getDouble("preco"));
-                p.setEstoqueMinimo(rs.getDouble("estoqueMinimo"));
-                */
+                p = new Pedido (numero, rs.getString("dataEmissao"));
+                p.setDataPagto(rs.getString("dataPagto"));
+                if ("P".equals(rs.getString("formaPagto"))) p.setFormaPagto(true);
+                else p.setFormaPagto(false);
+
+                daoCliente = new DaoCliente(conn);
+                p.setCliente(daoCliente.consultar(rs.getString("cliente")));
+                
+                daoVendedor = new DaoVendedor(conn);
+                p.setVendedor(daoVendedor.consultar(rs.getString("vendedor")));
+                
+                daoItemPedido = new DaoItemPedido(conn);
+                p.setItens(daoItemPedido.buscarItens(numero, p));
             }
         }
         catch (SQLException ex) {

@@ -551,7 +551,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             );
         } else {
             pedido = daoPedido.consultar(nPedido);
-            
+
             if (pedido == null) {
                 System.out.println("PEDIDO NÃO ENCONTRADO");
                 txtNumPed.setEnabled(false);
@@ -562,6 +562,40 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 rbtAPrazo.setEnabled(true);
             } else {
                 System.out.println("PEDIDO ENCONTRADO");
+                txtNumPed.setEnabled(false);
+                btnConPed.setEnabled(false);
+                ftfDatPed.setText(pedido.getDataEmissao());
+                ftfDatPed.setEnabled(false);
+                if (pedido.getFormaPagto()) rbtAPrazo.setSelected(true);
+                rbtAPrazo.setEnabled(false);
+                rbtAVista.setEnabled(false);
+                ftfCPFCli.setText(pedido.getCliente().getCpf());
+                lblNomCli.setText(pedido.getCliente().getNome());
+                ftfCPFCli.setEnabled(false);
+                btnConCli.setEnabled(false);
+                ftfCPFVen.setText(pedido.getVendedor().getCpf());
+                lblNomVen.setText(pedido.getVendedor().getNome());
+                ftfCPFVen.setEnabled(false);
+                btnConVen.setEnabled(false);
+                
+                for (int i=0; i<pedido.getItens().size(); i++) {
+                    String linha[] = {
+                        pedido.getItens().get(i).getProduto().getCodigo(),
+                        pedido.getItens().get(i).getProduto().getDescricao(),
+                        pedido.getItens().get(i).getProduto().getPreco()+"",
+                        pedido.getItens().get(i).getQtdeVendida()+"",
+                        (pedido.getItens().get(i).getQtdeVendida() * pedido.getItens().get(i).getProduto().getPreco()) + ""
+                    };
+
+                    modTblItens.addRow(linha);
+                    lblQtde.setText(formatQtde.format(pedido.calcQtdeItens()));
+                    lblTotal.setText(formatDinheiro.format(pedido.calcTotal()));
+
+                    btnRemIte.setEnabled(true);
+                    btnIncluir.setEnabled(false);
+                    btnAlterar.setEnabled(true);
+                    btnExcluir.setEnabled(true);
+                }
             }
         }
     }//GEN-LAST:event_btnConPedActionPerformed
@@ -679,6 +713,8 @@ public class frmEmitirPedido extends javax.swing.JFrame {
 
             if (produto.getQtdeEstoque() - qtd < produto.getEstoqueMinimo()) {
                 throw new IllegalArgumentException("Estoque insuficiente");
+            } else {
+                produto.setQtdeEstoque(produto.getQtdeEstoque() - qtd);
             }
 
             itemPedido = new ItemPedido(tblItens.getRowCount(), qtd, produto);
@@ -687,10 +723,8 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             // forma de pagamento
             pedido.setFormaPagto(rbtAPrazo.isSelected());
             if (pedido.getFormaPagto()) {
-                if (pedido.calcTotal() + qtd*produto.getPreco() > cliente.getLimiteDisp()) {
+                if (qtd*produto.getPreco() > cliente.getLimiteDisp()) {
                     throw new IllegalArgumentException("Limite de crédito insuficiente");
-                } else {
-                    cliente.setLimiteDisp(cliente.getLimiteDisp() - pedido.calcTotal() + qtd*produto.getPreco());
                 }
             }
 
@@ -746,11 +780,15 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         System.out.println("INCLUIR PEDIDO");
         daoPedido.inserir(pedido);
 
-        int i;
-
-        for (i=0; i<pedido.getItens().size(); i++) {
+        for (int i=0; i<pedido.getItens().size(); i++) {
             daoItemPedido.inserir(pedido.getItens().get(i));
+            daoProduto.alterar(pedido.getItens().get(i).getProduto());
+            if (pedido.getFormaPagto()) daoCliente.alterar(cliente);
         }
+
+        btnIncluir.setEnabled(false);
+        btnAlterar.setEnabled(true);
+        btnExcluir.setEnabled(true);
     }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
@@ -758,7 +796,7 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        System.out.println("ALTERAR PEDIDO");
+        System.out.println("EXCLUIR PEDIDO");
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     public static boolean isInteger(String s) {

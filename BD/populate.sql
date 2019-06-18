@@ -12,3 +12,6 @@ INSERT INTO Produto
 INSERT INTO Produto
 (codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES
 ('1', 'Mouse Logitech M170', 10, 'UN', 71.45, 1);
+INSERT INTO Produto
+(codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES
+('2', 'Balinha', 20, 'UN', 1, 0);

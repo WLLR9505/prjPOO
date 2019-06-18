@@ -11,7 +11,6 @@ public class ItemPedido {
         this.sequencia = sequencia;
         this.qtdeVendida = qtdeVendida;
         this.produto = produto;
-        produto.setQtdeEstoque(produto.getQtdeEstoque() - qtdeVendida);
     }
 
     public void setPedido(Pedido pedido) {
