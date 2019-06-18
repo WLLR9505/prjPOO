@@ -42,32 +42,6 @@ public class DaoPedido {
         }
     }
 
-    public void alterar(Produto p) {
-        PreparedStatement ps = null;
-        /*
-        try {
-            ps = conn.prepareStatement("UPDATE Produto SET "+
-                "descricao = ?,"+
-                "qtdeEstoque = ?,"+
-                "unidadeMedida = ?,"+
-                "preco = ?,"+
-                "estoqueMinimo = ? WHERE codigo = ?"
-            );
-
-            ps.setString(1, p.getDescricao());
-            ps.setDouble(2, p.getQtdeEstoque());
-            ps.setString(3, p.getUnidadeMedida());
-            ps.setDouble(4, p.getPreco());
-            ps.setDouble(5, p.getEstoqueMinimo());
-            ps.setString(6, p.getCodigo());
-
-            ps.execute();
-        } catch (SQLException ex) {
-             System.out.println(ex.toString());
-        }
-        */
-    }
-
     public Pedido consultar (String numero) {
         Pedido p = null;
 

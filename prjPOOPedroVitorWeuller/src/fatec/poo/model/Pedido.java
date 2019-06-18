@@ -29,8 +29,6 @@ public class Pedido {
     public void removeItem(int indice) {
         ItemPedido item = itens.get(indice);
         itens.remove(item);
-
-        
     }
     
     public ArrayList<ItemPedido> getItens() {

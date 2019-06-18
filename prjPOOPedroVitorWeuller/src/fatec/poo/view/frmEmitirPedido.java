@@ -540,7 +540,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnConPedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConPedActionPerformed
-        System.out.println(txtNumPed.getText());
         String nPedido = txtNumPed.getText();
         if (nPedido.isEmpty()) {
             JOptionPane.showMessageDialog(
@@ -553,7 +552,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             pedido = daoPedido.consultar(nPedido);
 
             if (pedido == null) {
-                System.out.println("PEDIDO NÃO ENCONTRADO");
                 txtNumPed.setEnabled(false);
                 btnConPed.setEnabled(false);
                 ftfDatPed.setEnabled(true);
@@ -561,7 +559,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 rbtAVista.setEnabled(true);
                 rbtAPrazo.setEnabled(true);
             } else {
-                System.out.println("PEDIDO ENCONTRADO");
                 txtNumPed.setEnabled(false);
                 btnConPed.setEnabled(false);
                 ftfDatPed.setText(pedido.getDataEmissao());
@@ -639,8 +636,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_validarData
 
     private void btnConCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConCliActionPerformed
-        System.out.println("PROCURAR CLIENTE");
-        
         cliente = daoCliente.consultar(ftfCPFCli.getValue().toString());
 
         if (cliente == null) {
@@ -663,8 +658,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConCliActionPerformed
 
     private void btnConVenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConVenActionPerformed
-        System.out.println("PROCURAR VENDEDOR");
-        
         vendedor = daoVendedor.consultar(ftfCPFVen.getValue().toString());
 
         if (vendedor == null) {
@@ -686,7 +679,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConVenActionPerformed
 
     private void btnConProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProActionPerformed
-        System.out.println("PROCURAR PRODUTO");        
         produto = daoProduto.consultar(txtCodPro.getText());
 
         if (produto == null) {
@@ -708,8 +700,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConProActionPerformed
 
     private void btnAdiIteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdiIteActionPerformed
-        System.out.println("ADICIONAR ITEM");
-        
         try {
             double qtd = Double.parseDouble(ftfQtdVen.getText().replace(",", "."));
             if (qtd == 0.0) {
@@ -725,7 +715,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
             itemPedido = new ItemPedido(tblItens.getRowCount(), qtd, produto);
             itemPedido.setPedido(pedido);
 
-            // forma de pagamento
             pedido.setFormaPagto(rbtAPrazo.isSelected());
             if (pedido.getFormaPagto()) {
                 if (qtd*produto.getPreco() > cliente.getLimiteDisp()) {
@@ -795,7 +784,6 @@ public class frmEmitirPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemIteActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        System.out.println("INCLUIR PEDIDO");
         daoPedido.inserir(pedido);
 
         for (int i=0; i<pedido.getItens().size(); i++) {
@@ -809,21 +797,13 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         btnExcluir.setEnabled(true);
     }//GEN-LAST:event_btnIncluirActionPerformed
 
-    private void alterarItens() {
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         daoItemPedido.excluiItensDoPedido(pedido);
         for (int i=0; i<pedido.getItens().size(); i++) {
             daoItemPedido.inserir(pedido.getItens().get(i));
             daoProduto.alterar(pedido.getItens().get(i).getProduto());
             if (pedido.getFormaPagto()) daoCliente.alterar(cliente);
         }
-    }
-    
-    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        System.out.println("ALTERAR PEDIDO");
-        // daoPedido.excluir(pedido);
-        alterarItens();
-        // Pedido copy = 
-        // btnIncluirActionPerformed(null);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
