@@ -80,4 +80,15 @@ public class DaoItemPedido {
         
         return itens;
     }
+    
+    public void excluiItensDoPedido(Pedido p) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("DELETE FROM ItemPedido WHERE pedido = ?");
+            ps.setString(1, p.getNumero());
+            ps.execute();
+        } catch (SQLException ex) {
+             System.out.println(ex.toString());
+        }
+    }
 }

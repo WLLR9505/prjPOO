@@ -30,9 +30,7 @@ public class Pedido {
         ItemPedido item = itens.get(indice);
         itens.remove(item);
 
-        if (formaPagto) {
-            cliente.setLimiteDisp(cliente.getLimiteDisp() + item.getProduto().getPreco() * item.getQtdeVendida());
-        }
+        
     }
     
     public ArrayList<ItemPedido> getItens() {

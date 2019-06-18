@@ -577,6 +577,8 @@ public class frmEmitirPedido extends javax.swing.JFrame {
                 lblNomVen.setText(pedido.getVendedor().getNome());
                 ftfCPFVen.setEnabled(false);
                 btnConVen.setEnabled(false);
+                txtCodPro.setEnabled(true);
+                btnConPro.setEnabled(true);
                 
                 for (int i=0; i<pedido.getItens().size(); i++) {
                     String linha[] = {
@@ -772,6 +774,19 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         if (tblItens.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "Selecione uma linha", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
+            pedido.getItens().get(tblItens.getSelectedRow()).getProduto().setQtdeEstoque(pedido.getItens().get(tblItens.getSelectedRow()).getProduto().getQtdeEstoque() + pedido.getItens().get(tblItens.getSelectedRow()).getQtdeVendida());
+            daoProduto.alterar(pedido.getItens().get(tblItens.getSelectedRow()).getProduto());
+            
+            if (pedido.getFormaPagto()) {
+                pedido.getCliente().setLimiteDisp(
+                    pedido.getCliente().getLimiteDisp() + 
+                    pedido.getItens().get(tblItens.getSelectedRow()).getProduto().getPreco() *
+                    pedido.getItens().get(tblItens.getSelectedRow()).getQtdeVendida()
+                );
+                
+                daoCliente.alterar(pedido.getCliente());
+            }
+
             pedido.removeItem(tblItens.getSelectedRow());
             modTblItens.removeRow(tblItens.getSelectedRow());
             lblQtde.setText(formatQtde.format(pedido.calcQtdeItens()));
@@ -794,15 +809,26 @@ public class frmEmitirPedido extends javax.swing.JFrame {
         btnExcluir.setEnabled(true);
     }//GEN-LAST:event_btnIncluirActionPerformed
 
+    private void alterarItens() {
+        daoItemPedido.excluiItensDoPedido(pedido);
+        for (int i=0; i<pedido.getItens().size(); i++) {
+            daoItemPedido.inserir(pedido.getItens().get(i));
+            daoProduto.alterar(pedido.getItens().get(i).getProduto());
+            if (pedido.getFormaPagto()) daoCliente.alterar(cliente);
+        }
+    }
+    
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         System.out.println("ALTERAR PEDIDO");
-        daoPedido.excluir(pedido);
-        btnIncluirActionPerformed(null);
+        // daoPedido.excluir(pedido);
+        alterarItens();
+        // Pedido copy = 
+        // btnIncluirActionPerformed(null);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         System.out.println("EXCLUIR PEDIDO");
-        
+
         daoPedido.excluir(pedido);
         txtNumPed.setEnabled(true);
         txtNumPed.setText("");

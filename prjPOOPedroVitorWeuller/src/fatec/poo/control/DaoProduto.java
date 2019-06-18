@@ -32,6 +32,7 @@ public class DaoProduto {
     }
 
     public void alterar(Produto p) {
+        System.out.print(p.getQtdeEstoque() + "\n");
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE Produto SET "+
