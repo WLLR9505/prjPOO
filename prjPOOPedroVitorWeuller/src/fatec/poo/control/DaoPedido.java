@@ -7,9 +7,15 @@ import java.sql.ResultSet;
 
 import fatec.poo.model.Produto;
 import fatec.poo.model.Pedido;
+import fatec.poo.model.Cliente;
 
 public class DaoPedido {
     private Connection conn;
+    private DaoCliente daoCliente;
+    private DaoProduto daoProduto;
+    private DaoVendedor daoVendedor;
+    private DaoItemPedido daoItemPedido;
+    private Produto produto;
 
     public DaoPedido(Connection conn) {
          this.conn = conn;
@@ -17,47 +23,23 @@ public class DaoPedido {
 
     public void inserir(Pedido p) {
         PreparedStatement ps = null;
-        /*
+
         try {
-            ps = conn.prepareStatement("INSERT INTO Produto (codigo, descricao, qtdeEstoque, unidadeMedida, preco, estoqueMinimo) VALUES(?,?,?,?,?,?)");
-            ps.setString(1, p.getCodigo());
-            ps.setString(2, p.getDescricao());
-            ps.setDouble(3, p.getQtdeEstoque());
-            ps.setString(4, p.getUnidadeMedida());
-            ps.setDouble(5, p.getPreco());
-            ps.setDouble(6, p.getEstoqueMinimo());
+            ps = conn.prepareStatement("INSERT INTO Pedido (numero, dataEmissao, dataPagto, formaPagto, cliente, vendedor) VALUES(?,?,?,?,?,?)");
+            ps.setString(1, p.getNumero());
+            ps.setString(2, p.getDataEmissao());
+            ps.setString(3, p.getDataPagto());
+            
+            if (p.getFormaPagto()) ps.setString(4, "P");
+            else ps.setString(4, "V");
+            
+            ps.setString(5, p.getCliente().getCpf());
+            ps.setString(6, p.getVendedor().getCpf());
 
             ps.execute();
         } catch (SQLException ex) {
              System.out.println(ex.toString());
         }
-        */
-    }
-
-    public void alterar(Produto p) {
-        PreparedStatement ps = null;
-        /*
-        try {
-            ps = conn.prepareStatement("UPDATE Produto SET "+
-                "descricao = ?,"+
-                "qtdeEstoque = ?,"+
-                "unidadeMedida = ?,"+
-                "preco = ?,"+
-                "estoqueMinimo = ? WHERE codigo = ?"
-            );
-
-            ps.setString(1, p.getDescricao());
-            ps.setDouble(2, p.getQtdeEstoque());
-            ps.setString(3, p.getUnidadeMedida());
-            ps.setDouble(4, p.getPreco());
-            ps.setDouble(5, p.getEstoqueMinimo());
-            ps.setString(6, p.getCodigo());
-
-            ps.execute();
-        } catch (SQLException ex) {
-             System.out.println(ex.toString());
-        }
-        */
     }
 
     public Pedido consultar (String numero) {
@@ -71,13 +53,19 @@ public class DaoPedido {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next() == true) {
-                /*
-                p = new Produto (codigo, rs.getString("descricao"));
-                p.setQtdeEstoque(rs.getDouble("qtdeEstoque"));
-                p.setUnidadeMedida(rs.getString("unidadeMedida"));
-                p.setPreco(rs.getDouble("preco"));
-                p.setEstoqueMinimo(rs.getDouble("estoqueMinimo"));
-                */
+                p = new Pedido (numero, rs.getString("dataEmissao"));
+                p.setDataPagto(rs.getString("dataPagto"));
+                if ("P".equals(rs.getString("formaPagto"))) p.setFormaPagto(true);
+                else p.setFormaPagto(false);
+
+                daoCliente = new DaoCliente(conn);
+                p.setCliente(daoCliente.consultar(rs.getString("cliente")));
+                
+                daoVendedor = new DaoVendedor(conn);
+                p.setVendedor(daoVendedor.consultar(rs.getString("vendedor")));
+                
+                daoItemPedido = new DaoItemPedido(conn);
+                p.setItens(daoItemPedido.buscarItens(numero, p));
             }
         }
         catch (SQLException ex) {
@@ -88,15 +76,30 @@ public class DaoPedido {
 
     public void excluir(Pedido p) {
         PreparedStatement ps = null;
-        /* TODO: antes de excluir o pedido, é preciso excluir todos os itens
-           referentes a ele na tabela itemPedido
+
         try {
-            ps = conn.prepareStatement("DELETE FROM Produto WHERE codigo = ?");
-            ps.setString(1, p.getCodigo());
+            if (p.getFormaPagto()) {
+                p.getCliente().setLimiteDisp(p.getCliente().getLimiteDisp() + p.calcTotal());
+                daoCliente = new DaoCliente(conn);
+                daoCliente.alterar(p.getCliente());
+            }
+
+            daoProduto = new DaoProduto(conn);
+            for (int i=0; i<p.getItens().size(); i++) {
+                produto = p.getItens().get(i).getProduto();
+                produto.setQtdeEstoque(produto.getQtdeEstoque() + p.getItens().get(i).getQtdeVendida());
+                daoProduto.alterar(produto);
+            }
+            
+            ps = conn.prepareStatement("DELETE FROM ItemPedido WHERE pedido = ?");
+            ps.setString(1, p.getNumero());
+            ps.execute();
+            
+            ps = conn.prepareStatement("DELETE FROM Pedido WHERE numero = ?");
+            ps.setString(1, p.getNumero());
             ps.execute();
         } catch (SQLException ex) {
              System.out.println(ex.toString());
         }
-        */
     }
 }

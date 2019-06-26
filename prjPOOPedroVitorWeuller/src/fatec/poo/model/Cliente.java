@@ -34,7 +34,7 @@ public class Cliente extends Pessoa {
         pedidos.add(pedido);
         pedido.setCliente(this);
     }
-    
+
     public ArrayList<Pedido> getPedidos() {
         return pedidos;
     }

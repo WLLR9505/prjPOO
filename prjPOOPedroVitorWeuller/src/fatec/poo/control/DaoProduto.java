@@ -11,9 +11,9 @@ public class DaoProduto {
     private Connection conn;
 
     public DaoProduto(Connection conn) {
-         this.conn = conn;
+        this.conn = conn;
     }
-    
+
     public void inserir(Produto p) {
         PreparedStatement ps = null;
         try {
@@ -32,6 +32,7 @@ public class DaoProduto {
     }
 
     public void alterar(Produto p) {
+        System.out.print(p.getQtdeEstoque() + "\n");
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("UPDATE Produto SET "+
